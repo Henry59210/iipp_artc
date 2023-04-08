@@ -8,23 +8,18 @@ import {useRouter} from "next/router";
 
 const items: MenuProps['items'] = [
     {
-        label: 'Navigation One',
-        key: 'mail',
+        label: (<Link href="./pageA">
+            PageA
+                </Link>
+        ),
+        key: 'PageA',
         icon: <MailOutlined />,
     },
     {
-        label: 'Navigation Two',
-        key: 'app',
+        label: 'PageB',
+        key: 'PageB',
         icon: <AppstoreOutlined />,
     },
-    {
-        label: (
-            <Link href="./pageA">
-        Navigation Four - Link
-            </Link>
-),
-key: 'alipay',
-},
 ];
 
 const NavBar= ({children}:{children:ReactNode}) => {
@@ -33,13 +28,19 @@ const NavBar= ({children}:{children:ReactNode}) => {
 
     const onClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);
-        let url = e.key==='app' ? '/pageA' : e.key==='mail' ? '/login' : '/'
+        let url = e.key==='PageA' ? '/pageA' : '/'
         router.push(url).then(()=>{setCurrent(e.key)})
     };
+    const renderNav= ()=>{
+        if(router.pathname === '/login') return null
+        else return(
+            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}></Menu>
+        )
+    }
 
     return (
         <>
-            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}></Menu>
+            {renderNav()}
             <div>{children}</div>
         </>
     );
