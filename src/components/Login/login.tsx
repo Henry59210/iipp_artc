@@ -13,7 +13,7 @@ const LoginBox = () => {
     let role = useAppSelector(selectRole)
     const onFinish = async (loginForm: LoginForm) => {
         await dispatch(loginAsync(loginForm))
-        console.log(role);
+        console.log(selectRole);
         // let urlForm = chooseForm(role)
         // console.log(urlForm)
         // await router.push('/')
@@ -23,6 +23,7 @@ const LoginBox = () => {
             <div className={styles.login_box}>
                 <div className={styles.hint_container}>
                     <span>Login</span>
+                    <span>{role}</span>
                 </div>
                 <Form
                     name="normal_login"
