@@ -1,6 +1,6 @@
 import request from '../utilities/fetchAPI'
 
-export interface LoginForm {
+export type LoginForm = {
     username: string
     password: string
 }

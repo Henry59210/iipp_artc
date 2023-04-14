@@ -1,12 +1,22 @@
 import styles from './styles.module.css'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import {Button, Form, Input,Checkbox} from "antd";
-import {loginAsync} from "../../features/user/userSlice";
-import {router} from "next/client";
+import {Button, Form, Input} from "antd";
+import {loginAsync, selectRole} from "../../features/user/userSlice";
+import { useRouter } from 'next/router'
+import {LoginForm} from "../../apis/userManagment";
+import {chooseForm} from "../../utilities/permission";
+import {useAppDispatch, useAppSelector} from "../../hooks";
+import {selectCount} from "../../features/counter/counterSlice";
 const LoginBox = () => {
-    const onFinish = async (values: any) => {
-       // let res = await loginAsync(values)
-        await router.push('/')
+    const router = useRouter()
+    const dispatch = useAppDispatch()
+    let role = useAppSelector(selectRole)
+    const onFinish = async (loginForm: LoginForm) => {
+        await dispatch(loginAsync(loginForm))
+        console.log(role);
+        // let urlForm = chooseForm(role)
+        // console.log(urlForm)
+        // await router.push('/')
     };
     return (
         <>

@@ -5,14 +5,14 @@ import {AppState} from "../../store";
 
 export interface UserState {
     token: string | undefined
-    role: string[]
+    role: string
     username: string
     userId: string
 }
 
 const initialState: UserState = {
     token: getToken(),
-    role: [],
+    role: '',
     username: '',
     userId: ''
 }
@@ -20,8 +20,15 @@ const initialState: UserState = {
 export const loginAsync = createAsyncThunk(
     'user/login',
     async (userInfo: LoginForm) => {
-        const response = await login(userInfo)
-        return response.data
+        // const response = await login(userInfo)
+        // return response.data
+        await setTimeout(()=>{},1000)
+        return {
+            token: 'userToken',
+            role: 'commercial',
+            username: 'commercial',
+            userId: '0001'
+        }
     }
 )
 
@@ -40,11 +47,11 @@ export const userSlice = createSlice({
         builder
             .addCase(loginAsync.fulfilled, (state, action) => {
                 if (action.payload !== null) {
-                    const { token, role, username, userid } = action.payload;
+                    const { token, role, username, userId } = action.payload;
                     state.token = token;
                     state.role = role;
                     state.username = username;
-                    state.userId = userid;
+                    state.userId = userId;
                     setToken(action.payload.token)
                 }
             })
