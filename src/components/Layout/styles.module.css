@@ -1,0 +1,35 @@
+.navbar {
+    height: 80px;
+    display: flex;
+}
+
+.navbar_item__menu {
+    line-height: 80px;
+    font-size: 20px;
+    font-weight: bold;
+    flex-basis: 65%;
+}
+
+.navbar_item__brand {
+    flex-basis: 15%;
+}
+
+.navbar_item__userinfo {
+    flex-basis: 20%;
+}
+
+.mask_layer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.6;
+    background: black;
+    z-index: 1;
+}
+.spin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}

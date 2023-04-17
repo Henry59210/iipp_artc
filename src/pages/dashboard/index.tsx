@@ -1,6 +1,6 @@
 import {NextPage} from "next";
 import {useRouter} from "next/router";
-import {getLayout} from "../../components/Layout";
+import {getLayout} from "../../components/Layout/Navbar";
 import {NextPageWithLayout} from "../_app";
 
 

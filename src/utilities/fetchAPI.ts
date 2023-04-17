@@ -51,9 +51,8 @@ export default async function fetchApi<T>(myOptions: FetchOptions): Promise<Fetc
             return Promise.reject(new Error(res.message || 'Error'))
         }
         return res;
-
     } catch (error) {
-        return { data: null, error: (error as Error).message || 'Fetch error' };
+        return { data: null, code: "", msg: "", error: (error as Error).message || 'Fetch error' };
     }
 }
 
@@ -70,6 +69,8 @@ interface FetchOptions extends Options{
 
 interface FetchResponse<T> {
     data: T | null;
+    msg: string;
+    code: string;
     error?: string;
 }
 

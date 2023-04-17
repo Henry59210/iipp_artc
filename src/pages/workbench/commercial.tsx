@@ -1,5 +1,5 @@
 import {NextPage} from "next";
-import {getLayout} from "../../components/Layout";
+import {getLayout} from "../../components/Layout/Navbar";
 import {NextPageWithLayout} from "../_app";
 
 

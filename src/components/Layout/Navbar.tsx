@@ -3,39 +3,33 @@ import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/ico
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import {useRouter} from "next/router";
-import {selectRole} from "../../features/user/userSlice";
-
-const items: MenuProps['items'] = [
-    {
-        label: 'DashBoard',
-        key: 'DashBoard',
-        icon: <MailOutlined />,
-    },
-    {
-        label: 'WorkBench',
-        key: 'WorkBench',
-        icon: <AppstoreOutlined />,
-    },
-    {
-        label: 'Order',
-        key: 'order',
-        icon: <AppstoreOutlined />,
-    },
-];
+import {selectUrlForm} from "../../features/user/userSlice";
+import {useAppSelector} from "../../hooks";
+import styles from "./styles.module.css"
 
 const NavBar = ({children}:{children:ReactNode}) => {
-    const [current, setCurrent] = useState('PageB');
+    const [current, setCurrent] = useState('dashboard');
     const router = useRouter();
-
-
+    const urlForm = useAppSelector(selectUrlForm)
+    const items:MenuProps['items']  = []
+    for (let i in urlForm) {
+        items.push({
+            label: i.slice(0,1).toUpperCase()+i.slice(1).toLowerCase(),
+            key: i
+        })
+    }
     const onClick: MenuProps['onClick'] = (e) => {
-
-        // router.push(url).then(()=>{setCurrent(e.key)})
+        router.push(urlForm[e.key])
+        setCurrent(e.key)
     };
 
     return (
         <>
-            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}></Menu>
+            <div className={styles.navbar}>
+                <div className={styles.navbar_item__brand}>logo</div>
+                <Menu className={styles.navbar_item__menu} style={{minWidth: 500}} onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}></Menu>
+                <div className={styles.navbar_item__userinfo}>aaa</div>
+            </div>
             <div>{children}</div>
         </>
     );

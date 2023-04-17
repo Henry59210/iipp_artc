@@ -5,17 +5,23 @@ export type LoginForm = {
     password: string
 }
 export interface UserInfo {
-    token: string
-    role: string[]
+    role: string
     username: string
-    userid: string
+    userId: string
     [key:string]: any
 }
 
 export function login(data: LoginForm){
-    return request<UserInfo>({
+    return request<string>({ //string指返回的data中是string
         url: '/login',
         method: 'POST',
         data
+    })
+}
+
+export function getInfo(){
+    return request<UserInfo>({
+        url: '/getUserInfo',
+        method: 'GET',
     })
 }
