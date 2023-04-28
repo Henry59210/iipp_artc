@@ -1,0 +1,21 @@
+.status_container {
+    width: 100%;
+    display: flex;
+}
+
+.status_container_status {
+    flex: 1;
+    border: 1px solid black;
+}
+
+.status_container_info {
+    flex: 1;
+    border: 1px solid black;
+
+}
+
+.status_container_composition {
+    flex: 1;
+    border: 1px solid black;
+
+}

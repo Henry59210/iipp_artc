@@ -1,7 +1,6 @@
 import type {GetServerSideProps, NextPage} from 'next'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import NavBar from "../components/Layout";
+import styles from '../styles/dashboard.module.css'
 import {ParsedUrlQuery} from "querystring";
 
 const IndexPage: NextPage = (props) => {

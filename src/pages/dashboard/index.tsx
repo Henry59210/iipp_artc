@@ -1,14 +1,16 @@
-import {NextPage} from "next";
-import {useRouter} from "next/router";
-import {getLayout} from "../../components/Layout/Navbar";
+import {getLayout} from "@/components/Layout";
 import {NextPageWithLayout} from "../_app";
+import styles from "@/styles/dashboard.module.css"
+import {Inventory} from "@/components/Dashboard/Inventory";
+import {ConfirmedOrder} from "@/components/Dashboard/ConfirmedOrder";
 
 
 const Dashboard: NextPageWithLayout = () => {
-    const router = useRouter()
     return (
-        <div>
-            dashboard
+        <div className={styles.container}>
+            <ConfirmedOrder/>
+            <Inventory type={'raw'}/>
+            <Inventory type={'product'}/>
         </div>
     )
 }

@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {getToken, removeToken, setToken} from "../../utilities/auth";
+import {getToken, removeToken, setToken} from "../../../network/auth";
 import {login, LoginForm, UserInfo} from "../../apis/userManagment";
 import {AppState} from "../../store";
-import {chooseForm, UrlCollection} from "../../utilities/urlForm";
+import {chooseForm, UrlCollection} from "../../../authenticate/urlForm";
 
 export interface UserState {
     token: string | undefined
