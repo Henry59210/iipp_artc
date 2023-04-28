@@ -27,7 +27,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
           REMOTE_USER: ${{ secrets.DEPLOY_USERNAME }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SOURCE: '.'
+          SOURCE: './.next' 'package*.json'
           TARGET: ~/dockerfiles/frontend/
       - name: Deploy to Docker on Linux
         uses: appleboy/ssh-action@master
