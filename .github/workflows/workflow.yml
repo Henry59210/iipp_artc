@@ -1,0 +1,33 @@
+name: Build and Deploy
+env:
+  APP_PORT: 3000
+  APP_NAME: frontend
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Install Dependencies
+        run: npm install
+      - name: Build Application
+        run: npm run build
+      - name: Deploy to Docker on Linux
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/dockerfiles
+            sudo docker-compose stop ${{ env.APP_NAME }} || true
+            sudo docker-compose rm ${{ env.APP_NAME }} || true
+            sudo docker-compose up -d ${{ env.APP_NAME }}
