@@ -2,13 +2,14 @@ export type UrlCollection = {
     [ket:string] : string
 }
 
-export const role = {
+export const role:{[key:string]: string[]} = {
     employee: ['commercial', 'production', 'shipment'],
     external: ['customer']
 }
 
 const commercialForm: UrlCollection = {
     dashboard: '/dashboard',
+    newOrder: '/newOrder',
     workbench: '/workbench/commercial',
     order: '/order/employee'
 }

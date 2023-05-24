@@ -1,35 +1,121 @@
-.navbar {
-    height: 80px;
-    display: flex;
+/*Layout*/
+.layout {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
 }
 
+/*navbar*/
+.navbar {
+    position: relative;
+    height: 80px;
+    display: flex;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    background: var(--back-color_navbar);
+    color: white;
+}
 .navbar_item__menu {
     line-height: 80px;
     font-size: 20px;
     font-weight: bold;
     flex-basis: 65%;
+    background: inherit;
+    color: inherit;
 }
 
 .navbar_item__brand {
     flex-basis: 15%;
+    margin: 0 15px;
+    cursor: pointer;
 }
 
 .navbar_item__userinfo {
     flex-basis: 20%;
+    line-height: 80px;
 }
-
-.mask_layer {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    opacity: 0.6;
-    background: black;
-    z-index: 1;
+/*noticeBar*/
+.noticebar {
+    float: right;
+    height: calc(100% - 80px);
+    width: var(--notice-width);
+    position: relative;
+    background: var(--back-color_navbar);
 }
-.spin {
-    position: absolute;
-    left: 50%;
+.noticebar_inline {
+    position: relative;
     top: 50%;
+    left: 50%;
+    width: 88%;
+    height: 94%;
     transform: translate(-50%, -50%);
-    z-index: 2;
+    border: 1px solid black;
+    border-radius: 10px;
+    background: var(--back-color_container);
+    box-sizing: border-box;
+    padding: 10px;
+    overflow: scroll;
+}
+.messagebox_init {
+    position: relative;
+    opacity: 0;
+    top: 100vh;
+    transition-property: opacity, top;
+    transition-duration: 1s;
+}
+.messagebox{
+    position: relative;
+    font-weight: bold;
+    margin-bottom: 10px;
+    box-shadow:0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    background: white;
+    border: 1px solid #DCDFE6;
+    border-radius: 10px;
+    padding: 10px 10px 0 10px;
+    top: 0;
+    opacity: 1;
+    color: #303133;
+}
+.messagebox_info {
+    text-align: center;
+}
+.messagebox_operate {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px
+}
+/*userBar*/
+.userbar {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    justify-content: center;
+}
+.userbar:hover {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+.userbar_item {
+    height: 100%;
+    line-height: 80px;
+    margin: 0 15px;
+    text-align: right;
+}
+.userbar_item__info {
+    height: 50%;
+    line-height: 39px;
+}
+.userbar_item__operate {
+    height: 50%;
+    line-height: 39px;
+
+}
+/*container*/
+.container {
+    position: absolute;
+    height: calc(100% - 80px);
+    left: 0;
+    right: var(--notice-width);
+    background: var(--back-color_container);
 }

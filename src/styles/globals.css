@@ -1,16 +1,33 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.ant-menu-item {
+    padding-inline: 45px !important;
+}
+
+:root {
+    --global-border-style: 1px solid rgb(240, 242, 245);
+    --global-box-shadow__inactive: 0 1px 2px 0 rgb(0 0 0 / 3%),
+    0 1px 6px -1px rgb(0 0 0 / 2%),
+    0 2px 4px 0 rgb(0 0 0 / 2%);
+    --global-box-shadow__active: 0 0 5px rgba(0, 0, 0, 0.5);
+    --back-color_navbar: #860563;
+    --notice-width: 17%;
+    --staff-dashboard-inventory-width: 30%;
+    --staff-dashboard-order-width: 40%;
+    --back-color_container: rgb(240, 242, 245);
 }

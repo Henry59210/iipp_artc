@@ -1,4 +1,4 @@
-import store from "../store";
+import store from "@/store";
 import {getToken} from "./auth";
 import qs from 'query-string';
 
@@ -14,7 +14,7 @@ import qs from 'query-string';
  * @param myOptions
  */
 const basicInfo = {
-    baseURL: '',
+    baseURL: '/api/v1',
     timeout: 5000
 }
 

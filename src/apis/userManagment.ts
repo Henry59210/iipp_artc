@@ -1,4 +1,4 @@
-import request from '../utilities/fetchAPI'
+import request from '../../network/fetchAPI'
 
 export type LoginForm = {
     username: string

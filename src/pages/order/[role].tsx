@@ -1,6 +1,6 @@
 import {NextPageWithLayout} from "../_app";
 import {useRouter} from "next/router";
-import {getLayout} from "../../components/Layout/Navbar";
+import {getLayout} from "@/components/Layout";
 
 const Order: NextPageWithLayout = () => {
     const router = useRouter()

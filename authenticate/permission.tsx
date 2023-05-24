@@ -1,11 +1,11 @@
-import {getToken} from "./auth";
-import {getInfoAsync, selectHasUserInfo, selectRole} from "../features/user/userSlice";
-import {useAppDispatch, useAppSelector} from "../hooks";
+import {getToken} from "../network/auth";
+import {getInfoAsync, selectHasUserInfo, selectRole} from "@/features/user/userSlice";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {useRouter} from "next/router";
 import {ReactNode, useEffect, useState} from "react";
-import NProgress from './mynprogress.js'
+import NProgress from '@/utilities/mynprogress.js'
 import {Spin} from "antd";
-import {Loading} from "@/components/Layout/Loading";
+import {Loading} from "@/components/Global/Loading";
 
 
 const whiteList = ['/login']
@@ -20,7 +20,6 @@ export const Permission = ({children}:{children:ReactNode})=>{
         let time = 0
         const handleRouteChange = async () => {
             NProgress.start();
-            console.log('abc')
             if (hasToken) {
                 if(router.pathname==='/login'){
                     await router.push('/dashboard')
@@ -28,7 +27,6 @@ export const Permission = ({children}:{children:ReactNode})=>{
                 } else {
                     if(hasUserInfo) {
                         setAuthorized(true)
-                        console.log('aaa')
                         NProgress.done()
                     } else {
                         await dispatch(getInfoAsync());
@@ -37,10 +35,8 @@ export const Permission = ({children}:{children:ReactNode})=>{
                     }
                 }
             } else {
-                console.log('bb')
                 if (whiteList.indexOf(router.pathname) === -1 ) {
                     router.push('/login').then(NProgress.done());
-                    console.log('ccc')
                 } else {
                     setAuthorized(true)
                     NProgress.done()
