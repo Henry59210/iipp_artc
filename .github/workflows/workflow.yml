@@ -28,7 +28,7 @@ jobs:
           REMOTE_USER: ${{ secrets.DEPLOY_USERNAME }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SOURCE: ./.next ./package.json ./package-lock.json
-          TARGET: ~/dockerfiles/frontend/
+          TARGET: ~/dockerfiles/artc-frontend/
       - name: Deploy to Docker on Linux
         uses: appleboy/ssh-action@master
         with:
@@ -37,6 +37,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/dockerfiles
-            sudo docker-compose stop ${{ env.APP_NAME }} || true
-            sudo docker-compose rm ${{ env.APP_NAME }} || true
+            sudo docker-compose build ${{ env.APP_NAME }}
             sudo docker-compose up -d ${{ env.APP_NAME }}
