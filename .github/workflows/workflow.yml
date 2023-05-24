@@ -19,7 +19,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build Application
-        run: npm run build
+        run: next build
 
       - name: Copy files to server
         uses: easingthemes/ssh-deploy@main
