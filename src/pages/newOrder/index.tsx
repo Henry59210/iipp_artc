@@ -1,13 +1,15 @@
 import {NextPageWithLayout} from "@/pages/_app";
-import styles from "@/styles/dashboard.module.css";
-import {ConfirmedOrder} from "@/components/Dashboard/ConfirmedOrder";
-import {Inventory} from "@/components/Dashboard/Inventory";
+import styles from "@/styles/neworder.module.css";
+import {UnconfirmedOrder} from "@/components/Neworder/UnconfirmedOrder";
+import {Inventory} from "@/components/Neworder/Inventory";
 import {getLayout} from "@/components/Layout";
 
 const NewOrder: NextPageWithLayout = () => {
     return (
         <div className={styles.container}>
-           new order
+            <UnconfirmedOrder/>
+            <Inventory type={'raw'}/>
+            <Inventory type={'product'}/>
         </div>
     )
 }

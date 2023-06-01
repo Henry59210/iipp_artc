@@ -12,12 +12,13 @@ const LoginBox = () => {
     const dispatch = useAppDispatch()
 
     const onFinish = async (loginForm: LoginForm) => {
+        console.log(loginForm)
         await dispatch(loginAsync(loginForm))
         // const action = await dispatch(getInfoAsync())
         // if (getInfoAsync.fulfilled.match(action)) {
         //     let { urlForm } = action.payload
         //     console.log(action.payload)
-            await router.push("/dashboard")
+        await router.push("/dashboard")
         // }
     };
 
@@ -50,11 +51,9 @@ const LoginBox = () => {
                             placeholder="Password"
                         />
                     </Form.Item>
-                    <Form.Item>
-                        <Button className={styles.login_btn} type="primary" htmlType="submit">
-                            Log in
-                        </Button>
-                    </Form.Item>
+                    <Button className={styles.login_btn} type="primary" htmlType="submit">
+                        Log in
+                    </Button>
                 </Form>
             </div>
         </>

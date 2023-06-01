@@ -30,7 +30,7 @@ export const loginAsync = createAsyncThunk(
     'user/login',
     async (userInfo: LoginForm) => {
         // const response = await login(userInfo)
-        // return response.data
+        // return response.data ? response.data : 'token error'
         const data = 'userToken'
         return data
     }

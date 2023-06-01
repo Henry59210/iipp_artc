@@ -2,8 +2,8 @@ html,
 body {
     padding: 0;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    color: #606266;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
 a {
@@ -19,6 +19,14 @@ a {
     padding-inline: 45px !important;
 }
 
+.ant-drawer .ant-drawer-title{
+    font-size: 20px;
+    color: white;
+}
+.ant-drawer .ant-drawer-close {
+    color: white;
+}
+
 :root {
     --global-border-style: 1px solid rgb(240, 242, 245);
     --global-box-shadow__inactive: 0 1px 2px 0 rgb(0 0 0 / 3%),
@@ -26,8 +34,9 @@ a {
     0 2px 4px 0 rgb(0 0 0 / 2%);
     --global-box-shadow__active: 0 0 5px rgba(0, 0, 0, 0.5);
     --back-color_navbar: #860563;
-    --notice-width: 17%;
     --staff-dashboard-inventory-width: 30%;
     --staff-dashboard-order-width: 40%;
     --back-color_container: rgb(240, 242, 245);
+    --country-font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    --font-color: #606266;
 }

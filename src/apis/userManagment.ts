@@ -4,6 +4,7 @@ export type LoginForm = {
     username: string
     password: string
 }
+
 export interface UserInfo {
     role: string
     username: string
@@ -13,7 +14,7 @@ export interface UserInfo {
 
 export function login(data: LoginForm){
     return request<string>({ //string指返回的data中是string
-        url: '/login',
+        url: '/auth/login',
         method: 'POST',
         data
     })

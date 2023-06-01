@@ -15,7 +15,6 @@ export const Layout = ({children}: {children: ReactNode}) => {
                 }}
             >
             <NavBar/>
-            <NoticeBar></NoticeBar>
             <div className={styles.container}>{children}</div>
             </ConfigProvider>
         </div>

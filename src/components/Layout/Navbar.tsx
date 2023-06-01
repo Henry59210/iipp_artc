@@ -1,6 +1,6 @@
-import React, {ReactElement, ReactNode, useState} from "react";
-import type { MenuProps } from 'antd';
-import {Avatar, Button, ConfigProvider, Menu} from 'antd';
+import React, {ReactElement, ReactNode, useEffect, useState} from "react";
+import type {MenuProps} from 'antd';
+import {Avatar, Badge, Button, ConfigProvider, Drawer, Menu} from 'antd';
 import {useRouter} from "next/router";
 import {selectRole, selectUrlForm} from "@/features/user/userSlice";
 import {useAppSelector} from "@/hooks";
@@ -8,15 +8,31 @@ import styles from "./styles.module.css"
 import {UserOutlined} from "@ant-design/icons";
 import Image from 'next/image'
 import dashboard from "@/pages/dashboard";
+import {
+    BellFilled
+} from '@ant-design/icons';
+import {NoticeBar} from "@/components/Layout/NoticeBar";
+import {isFunction} from "@antv/util";
 
 const NavBar = () => {
-    const [current, setCurrent] = useState('dashboard');
+    const [open, setOpen] = useState(false);
     const router = useRouter();
     const urlForm = useAppSelector(selectUrlForm)
-    const items:MenuProps['items']  = []
+    const [current, setCurrent] = useState('dashboard')
+    useEffect(()=>{
+        setCurrent(Object.entries(urlForm).find(([key, value]) => value === router.asPath)?.[0] !)
+    }, [urlForm])
+    const items: MenuProps['items'] = []
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
     for (let i in urlForm) {
         items.push({
-            label: i.slice(0,1).toUpperCase()+i.slice(1).toLowerCase(),
+            label: i.slice(0, 1).toUpperCase() + i.slice(1).toLowerCase(),
             key: i
         })
     }
@@ -26,43 +42,53 @@ const NavBar = () => {
     };
 
     return (
+        <>
             <div className={styles.navbar}>
-                <div className={styles.navbar_item__brand} onClick={()=>{router.push('/dashboard');setCurrent('dashboard')}}>
+                <div className={styles.navbar_item__brand} onClick={() => {
+                    router.push('/dashboard');
+                    setCurrent('dashboard')
+                }}>
                     <Image src='/OFI_logo.png' alt='logo' width={80} height={80}/>
                 </div>
-                <Menu className={styles.navbar_item__menu} style={{minWidth: 500}} onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}></Menu>
+                <Menu className={styles.navbar_item__menu} style={{minWidth: 500}} onClick={onClick}
+                      selectedKeys={[current]} mode="horizontal" items={items}></Menu>
                 <div className={styles.navbar_item__userinfo}>
-                    <UserBar/>
+                    <UserBar showNoticeBar={showDrawer}/>
                 </div>
             </div>
+            <Drawer title="Information"
+                    width={320}
+                    headerStyle={{'background': 'var(--back-color_navbar)', 'color': 'white'}}
+                    bodyStyle={{'padding': '0'}} placement="right" onClose={onClose} open={open}>
+                <NoticeBar/>
+            </Drawer>
+        </>
+
     );
 };
 
 export default NavBar;
 
-const UserBar = () => {
+const UserBar = (props: {showNoticeBar: any}) => {
     const role = useAppSelector(selectRole)
-    const [isHovered, setIsHovered] = useState(false); // 初始状态为非悬停
-    const logout = ()=>{
+    const logout = () => {
         console.log(this)
     }
-    const handleMouseEnter = () => {
-        setIsHovered(true); // 设置状态为悬停
-    };
-
-    const handleMouseLeave = () => {
-        setIsHovered(false); // 设置状态为非悬停
-    };
     return (
         <div className={styles.userbar}>
+            <div className={styles.userbar_notification}>
+                <Badge count={99}>
+                    <BellFilled className={styles.userbar_notification__icon} onClick={props.showNoticeBar}/>
+                </Badge>
+            </div>
             <div className={styles.userbar_item}>
                 {/*<Avatar shape="square" size={56} icon={<UserOutlined />} />*/}
-                <Avatar size={64} style={{ backgroundColor: '#fde3cf', color: '#f56a00' }}>{role}</Avatar>
+                <Avatar size={64} style={{backgroundColor: '#fde3cf', color: '#f56a00'}}>{role}</Avatar>
             </div>
             <div className={styles.userbar_item}>
                 <div className={styles.userbar_item__info}>{role}</div>
                 <div className={styles.userbar_item__operate}>
-                    <Button type="link" size={"small"} style={{ color: '#F78C2A' }} onClick={logout}>Logout</Button>
+                    <Button type="link" size={"small"} style={{color: '#F78C2A'}} onClick={logout}>Logout</Button>
                 </div>
             </div>
         </div>

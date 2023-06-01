@@ -1,11 +1,13 @@
-import styles from "@/components/Dashboard/styles.module.css";
+import styles from "@/components/Neworder/styles.module.css";
 import {Button, Divider, Modal, Typography} from "antd";
 import React, {useEffect, useState} from "react";
 import {OrderInfo} from "@/apis/order";
 import {dateConvert} from "@/utilities/usefulTools";
 import {StatusDetails} from "@/components/Details/StatusDetails";
+import {ItemText} from "@/components/Global/ItemText";
+import {InventoryDetails} from "@/components/Details/InventoryDetails";
+const { Text } = Typography;
 
-const {Text} = Typography;
 const testData: Array<OrderInfo> = [
     {
         customerId: "Singapore",
@@ -29,7 +31,7 @@ const testData: Array<OrderInfo> = [
                 quantity: 30
             }
         ],
-        status: "confirmed"
+        status: "unconfirmed"
     },
     {
         customerId: "China",
@@ -51,13 +53,49 @@ const testData: Array<OrderInfo> = [
                 id: "string",
                 productName: "coco3",
                 quantity: 10
-            }
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
+            {
+                id: "string",
+                productName: "coco3",
+                quantity: 10
+            },
         ],
-        status: "confirmed"
+        status: "unconfirmed"
     }
 
 ]
-export const ConfirmedOrder = () => {
+
+export const UnconfirmedOrder = () => {
     const [orderList, setOrderList] = useState<Array<OrderInfo>>([])
     useEffect(() => {
         const res = testData
@@ -65,62 +103,53 @@ export const ConfirmedOrder = () => {
     }, [])
 
     return (
-        <div className={styles.confirmed_order_container}>
+        <div className={styles.unconfirmed_order_container}>
             <div className={styles.container_title}>
-                <span>Confirmed Order List: </span>
+                <span>unconfirmed Order List: </span>
             </div>
             {
-                orderList.map(item => <ConfirmedOrderItem {...item}/>)
+                orderList.map(item => <UnconfirmedOrderItem {...item}/>)
             }
         </div>
     )
 }
 
-const ConfirmedOrderItem = (orderInfo: OrderInfo) => {
+const UnconfirmedOrderItem = (orderInfo: OrderInfo) => {
     const [open, setOpen] = useState(false);
 
     const {customerId, expectedTime, id, orderDate, productList, status} = orderInfo
-    // @ts-ignore
     return (
         <>
-            <div className={styles.confirmed_order_item}>
+            <div className={styles.unconfirmed_order_item}>
             {/*顶部id*/}
-            <div className={styles.confirmed_order_item_id}>{'ID: ' + id}</div>
-            {/*中间部门+信息+按钮*/}
-            <div className={styles.confirmed_order_item_content}>
-                <div className={styles.confirmed_order_item_content__dep}>{customerId}</div>
-                <div className={styles.confirmed_order_item_content__info}>
-                    <table>
-                        <tr>
-                            <th>Expect: </th>
-                            <td>{dateConvert(expectedTime, ['YYYY','-','MM','-','DD'])}</td>
-                        </tr>
-                        <tr>
-                            <th>Package: </th>
-                            <td>{productList.reduce((pre, now) => {
-                                return pre + now.quantity
-                            }, 0)}</td>
-                        </tr>
-                    </table>
+            <div className={styles.unconfirmed_order_item_id}>{'ID: ' + id}</div>
+            {/*中间部分+信息+按钮*/}
+            <div className={styles.unconfirmed_order_item_content}>
+                <div className={styles.unconfirmed_order_item_content__dep}>{customerId}</div>
+                <div className={styles.unconfirmed_order_item_content__info}>
+                    <div className={styles.order_items_container}>
+                        { orderInfo.productList.map(item=><ItemText title={item.productName} value={item.quantity}/>) }
+                    </div>
                 </div>
-                <div className={styles.confirmed_order_item_content__btn}>
+                <div className={styles.unconfirmed_order_item_content__btn}>
                     <Button type="link" onClick={() => setOpen(true)}>Detail</Button>
                 </div>
             </div>
             {/*底部时间*/}
-            <div className={styles.confirmed_order_item_time}>
+            <div className={styles.unconfirmed_order_item_time}>
                 <span>{dateConvert(orderDate)}</span>
             </div>
         </div>
             <Modal
-                title="Modal 1000px width"
+                title="Inventory Details"
                 centered
                 open={open}
+                okText={'confirm'}
                 onOk={() => setOpen(false)}
                 onCancel={() => setOpen(false)}
-                width={1000}
+                width={800}
             >
-              <StatusDetails/>
+              <InventoryDetails id={id}/>
             </Modal>
         </>
 

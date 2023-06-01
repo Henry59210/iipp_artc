@@ -23,13 +23,13 @@ export default async function fetchApi<T>(myOptions: FetchOptions): Promise<Fetc
 
     //before request
     let defaultHeader:DefaultHeader = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
         Accept: 'application/json',
     }
     if(store.getState().user.token){
         defaultHeader.User_Token = getToken()
     }
-    headers = headers ? {...defaultHeader, ...headers} : headers
+    headers = headers ? {...defaultHeader, ...headers} : {...defaultHeader}
 
     let opt:Options = {
         method,
@@ -43,10 +43,11 @@ export default async function fetchApi<T>(myOptions: FetchOptions): Promise<Fetc
     }
     //request start
     try {
-        const response = await fetch(basicInfo.baseURL + url, );
+        const response = await fetch(basicInfo.baseURL + url, opt);
     //request finish
         const res = await response.json();
         if (res.code !== '200') {
+
             //错误处理
             return Promise.reject(new Error(res.message || 'Error'))
         }
@@ -56,12 +57,10 @@ export default async function fetchApi<T>(myOptions: FetchOptions): Promise<Fetc
     }
 }
 
-interface Options {
-    method: string;
-    headers?: Record<string, string>;
-    body?: Record<string, any> | string;
-    param?: Record<string, any> | string;
+interface Options extends RequestInit {
+    param?: {[key:string]: any}| string;
 }
+
 interface FetchOptions extends Options{
     url: string;
     data?: Record<string, any> | string;
@@ -75,8 +74,8 @@ interface FetchResponse<T> {
 }
 
 interface DefaultHeader {
-    'Content-Type': string,
-    Accept: string,
+    'Content-Type': string
+    Accept: string
     User_Token?: string
 }
 

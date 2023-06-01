@@ -19,36 +19,71 @@
     top:100px;
     left: 100px;
 }
-.login_box {
-    position: absolute;
-    background: rgba(255, 255, 255);
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
-    width: 35%;
-    height: 60%;
-    border-radius: 8%;
-    opacity: 0.9;
+
+@media screen and (min-width: 1000px) {
+    .login_box {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        background: rgba(255, 255, 255);
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        width: 35%;
+        height: 60%;
+        border-radius: 8%;
+        opacity: 0.9;
+    }
+}
+@media screen and (max-width: 1000px)  {
+    .login_box {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        background: rgba(255, 255, 255);
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        height: 60%;
+        border-radius: 8%;
+        opacity: 0.9;
+    }
+}
+@media screen and (max-width: 500px)  {
+    .login_box {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        background: rgba(255, 255, 255);
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 60%;
+        border-radius: 0;
+        opacity: 0.9;
+    }
 }
 .hint_container {
     text-align: center;
     box-sizing: border-box;
-    margin: 10% 0 0 0;
+    flex: 1;
+    margin-top: 10%;
     font-size: 40px;
 }
 .form_container {
-    width: 100%;
-    height: 100%;
+    flex: 4;
     padding: 10%;
 }
 .login_input {
-    height: 50px;
+    height: 6vh;
 }
 .login_btn {
-    position: relative;
-    top: 50px;
+    position: absolute;
+    bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
     width: 30%;
-    height: 50px;
+    height: 6vh;
 }

@@ -16,6 +16,9 @@
     background: var(--back-color_navbar);
     color: white;
 }
+.drawer {
+    padding: 0;
+}
 .navbar_item__menu {
     line-height: 80px;
     font-size: 20px;
@@ -35,14 +38,15 @@
     flex-basis: 20%;
     line-height: 80px;
 }
+
 /*noticeBar*/
 .noticebar {
-    float: right;
-    height: calc(100% - 80px);
-    width: var(--notice-width);
+    height: 100%;
+    width: 100%;
     position: relative;
     background: var(--back-color_navbar);
 }
+
 .noticebar_inline {
     position: relative;
     top: 50%;
@@ -50,25 +54,25 @@
     width: 88%;
     height: 94%;
     transform: translate(-50%, -50%);
-    border: 1px solid black;
     border-radius: 10px;
     background: var(--back-color_container);
     box-sizing: border-box;
-    padding: 10px;
+    padding: 10px 20px;
     overflow: scroll;
 }
+
 .messagebox_init {
-    position: relative;
     opacity: 0;
     top: 100vh;
     transition-property: opacity, top;
     transition-duration: 1s;
 }
-.messagebox{
+
+.messagebox {
     position: relative;
     font-weight: bold;
     margin-bottom: 10px;
-    box-shadow:0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     background: white;
     border: 1px solid #DCDFE6;
     border-radius: 10px;
@@ -77,14 +81,17 @@
     opacity: 1;
     color: #303133;
 }
+
 .messagebox_info {
     text-align: center;
 }
+
 .messagebox_operate {
     display: flex;
     justify-content: space-around;
     padding: 10px
 }
+
 /*userBar*/
 .userbar {
     height: 100%;
@@ -92,30 +99,55 @@
     display: flex;
     position: relative;
     justify-content: center;
+    align-items: center;
 }
+
 .userbar:hover {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 }
+
+.userbar_notification {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 40px;
+}
+
+.userbar_notification__icon {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+.userbar_notification__icon:active {
+    color: #F78C2A;
+}
+
+
 .userbar_item {
     height: 100%;
     line-height: 80px;
     margin: 0 15px;
     text-align: right;
 }
+
 .userbar_item__info {
     height: 50%;
     line-height: 39px;
 }
+
 .userbar_item__operate {
     height: 50%;
     line-height: 39px;
 
 }
+
 /*container*/
 .container {
     position: absolute;
     height: calc(100% - 80px);
     left: 0;
-    right: var(--notice-width);
+    width: 100%;
     background: var(--back-color_container);
 }

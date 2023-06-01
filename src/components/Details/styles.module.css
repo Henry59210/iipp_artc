@@ -1,3 +1,4 @@
+/*statusDetail*/
 .status_container {
     width: 100%;
     display: flex;
@@ -17,5 +18,43 @@
 .status_container_composition {
     flex: 1;
     border: 1px solid black;
+}
+
+/*inventoryDetails*/
+.inventory_container {
+    height: 60vh;
+    border: 1px solid black;
+}
+.inventory_container_title {
+    display: flex;
+    border: 1px solid black;
+}
+.inventory_container_title__country {
+    flex: 3;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: var(--country-font-family);
+    color: var(--font-color);
+    border: 1px solid black;
+}
+.inventory_container_title__info {
+    flex: 7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: var(--country-font-family);
+    color: var(--font-color);
+    padding-left: 10px;
+    border: 1px solid black;
+}
+.type {
+
+}
+.status {
 
 }
