@@ -1,13 +1,15 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import counterReducer from './features/counter/counterSlice'
 import userReducer from './features/user/userSlice'
+import pageReducer from "@/features/pageMemo/pageSlice";
 
 
 export function makeStore() {
   return configureStore({
     reducer: {
         counter: counterReducer,
-        user: userReducer
+        user: userReducer,
+        page: pageReducer
     },
   })
 }

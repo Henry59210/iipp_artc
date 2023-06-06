@@ -19,21 +19,20 @@
 
 /*ItemText*/
 .order_items_text {
-    position: relative;
-    width: 100%;
+    display: flex;
     font-size: 16px;
-    line-height: 30px;
-    list-style: none;
 }
 .title {
-    position: absolute;
-    width: 60px;
+    position: relative;
+    margin-bottom: 15px;
+    min-width: 150px;
+    max-width: 150px;
 }
 .title:before {
     position: absolute;
-    left: 60px;
+    right: 0;
     content: ':';
 }
 .value {
-    padding-left: 80px;
+   margin-left: 10px;
 }

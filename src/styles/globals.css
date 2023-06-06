@@ -26,7 +26,6 @@ a {
 .ant-drawer .ant-drawer-close {
     color: white;
 }
-
 :root {
     --global-border-style: 1px solid rgb(240, 242, 245);
     --global-box-shadow__inactive: 0 1px 2px 0 rgb(0 0 0 / 3%),

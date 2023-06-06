@@ -1,11 +1,12 @@
 import styles from "@/components/Neworder/styles.module.css";
-import {Button, Divider, Modal, Typography} from "antd";
+import {Button, Divider, Modal, Popover, Tooltip, Typography} from "antd";
 import React, {useEffect, useState} from "react";
 import {OrderInfo} from "@/apis/order";
 import {dateConvert} from "@/utilities/usefulTools";
 import {StatusDetails} from "@/components/Details/StatusDetails";
 import {ItemText} from "@/components/Global/ItemText";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
+import {color} from "@antv/g2plot/lib/plots/dual-axes/adaptor";
 const { Text } = Typography;
 
 const testData: Array<OrderInfo> = [
@@ -17,18 +18,18 @@ const testData: Array<OrderInfo> = [
         productList: [
             {
                 id: "string",
-                productName: "coco1",
-                quantity: 10
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
             },
             {
                 id: "string",
-                productName: "coco2",
-                quantity: 20
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
             },
             {
                 id: "string",
-                productName: "coco3",
-                quantity: 30
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
             }
         ],
         status: "unconfirmed"
@@ -41,52 +42,72 @@ const testData: Array<OrderInfo> = [
         productList: [
             {
                 id: "string",
-                productName: "coco1",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            }, {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
+                quantity: 1000
+            },
+
+            {
+                id: "string",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
                 quantity: 10
             },
             {
                 id: "string",
-                productName: "coco2",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
                 quantity: 10
             },
             {
                 id: "string",
-                productName: "coco3",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
                 quantity: 10
             },
             {
                 id: "string",
-                productName: "coco3",
-                quantity: 10
-            },
-            {
-                id: "string",
-                productName: "coco3",
-                quantity: 10
-            },
-            {
-                id: "string",
-                productName: "coco3",
-                quantity: 10
-            },
-            {
-                id: "string",
-                productName: "coco3",
-                quantity: 10
-            },
-            {
-                id: "string",
-                productName: "coco3",
-                quantity: 10
-            },
-            {
-                id: "string",
-                productName: "coco3",
-                quantity: 10
-            },
-            {
-                id: "string",
-                productName: "coco3",
+                productName: "MIX CHOC DRINK KR 560G 16/CS",
                 quantity: 10
             },
         ],
@@ -127,8 +148,12 @@ const UnconfirmedOrderItem = (orderInfo: OrderInfo) => {
             <div className={styles.unconfirmed_order_item_content}>
                 <div className={styles.unconfirmed_order_item_content__dep}>{customerId}</div>
                 <div className={styles.unconfirmed_order_item_content__info}>
+                    <Popover placement="right"
+                             content={<div className={styles.overview_content}>{productList.map(item=><ItemText title={item.productName} value={item.quantity}/>) }</div>}>
+                        <div className={styles.overview}>overview</div>
+                    </Popover>
                     <div className={styles.order_items_container}>
-                        { orderInfo.productList.map(item=><ItemText title={item.productName} value={item.quantity}/>) }
+                        { productList.map(item=><ItemText title={item.productName} value={item.quantity}/>) }
                     </div>
                 </div>
                 <div className={styles.unconfirmed_order_item_content__btn}>
@@ -147,7 +172,7 @@ const UnconfirmedOrderItem = (orderInfo: OrderInfo) => {
                 okText={'confirm'}
                 onOk={() => setOpen(false)}
                 onCancel={() => setOpen(false)}
-                width={800}
+                width={1000}
             >
               <InventoryDetails id={id}/>
             </Modal>
