@@ -18,7 +18,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
           REMOTE_USER: ${{ secrets.DEPLOY_USERNAME }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SCRIPT_BEFORE: rm -rf ~/dockerfiles/artc-frontend/
           SOURCE: ./
           TARGET: ~/dockerfiles/artc-frontend/
       - name: Deploy to Docker on Linux
@@ -30,3 +29,4 @@ jobs:
           script: |
             cd ~/dockerfiles
             sudo docker-compose up -d --build ${{ env.APP_NAME }}
+            rm -rf ~/dockerfiles/artc-frontend/
