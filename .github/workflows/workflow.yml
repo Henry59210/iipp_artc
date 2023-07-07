@@ -12,6 +12,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+      - name: Delete server packages
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            rm -rf ~/dockerfiles/artc-frontend/
       - name: Copy files to server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -29,4 +37,3 @@ jobs:
           script: |
             cd ~/dockerfiles
             sudo docker-compose up -d --build ${{ env.APP_NAME }}
-            rm -rf ~/dockerfiles/artc-frontend/
