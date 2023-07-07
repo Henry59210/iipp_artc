@@ -7,183 +7,183 @@ import {InfoCircleOutlined} from '@ant-design/icons';
 import {productFormatConvert} from "@/utilities/usefulTools";
 import {func} from "prop-types";
 
-const testData:OrderDetail = {
-    id: "string",
-    status: "purchase",
-    type: "order",
-    orderDate: "string",
-    expectedTime: "string",
-    customerId: 'India',
-    executableState: 'need production',
-    productDetailList: [
-        {
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },
-        {
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },{
-            inventoryQuantity: 0,
-            materialList: [
-                {
-                    materialId: "a",
-                    materialName: "a",
-                    weight: 0
-                }
-            ],
-            needQuantity: 0,
-            orderQuantity: 0,
-            productId: "a",
-            productName: "a"
-        },],
-    demandMaterialList: [
-        {
-            demandWeight: 0,
-            inventoryWeight: 0,
-            materialId: "string",
-            materialName: "string",
-            purchaseDemand: 0
-        }
-    ]
-}
+// const testData:OrderDetail = {
+//     id: "string",
+//     status: "purchase",
+//     type: "order",
+//     orderDate: "string",
+//     expectedTime: "string",
+//     customerId: 'India',
+//     executableState: 'need production',
+//     productDetailList: [
+//         {
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },
+//         {
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },{
+//             inventoryQuantity: 0,
+//             materialList: [
+//                 {
+//                     materialId: "a",
+//                     materialName: "a",
+//                     weight: 0
+//                 }
+//             ],
+//             needQuantity: 0,
+//             orderQuantity: 0,
+//             productId: "a",
+//             productName: "a"
+//         },],
+//     demandMaterialList: [
+//         {
+//             demandWeight: 0,
+//             inventoryWeight: 0,
+//             materialId: "string",
+//             materialName: "string",
+//             purchaseDemand: 0
+//         }
+//     ]
+// }
 
 const status2color: { [key: string]: string } = {
     purchase: 'red',
@@ -200,6 +200,7 @@ export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, 
         id: "",
         orderDate: "",
         status: "",
+        orderStatusHistoryList: [],
         type: "",
         productDetailList: [],
         demandMaterialList: []

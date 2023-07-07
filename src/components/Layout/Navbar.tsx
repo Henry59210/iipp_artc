@@ -80,7 +80,8 @@ const UserBar = (props: {showNoticeBar: any}) => {
         <div className={styles.userbar}>
             <div className={styles.userbar_notification}>
                 <Badge count={99}>
-                    <BellFilled className={styles.userbar_notification__icon} onClick={props.showNoticeBar}/>
+                    <BellFilled className={styles.userbar_notification__icon} onClick={props.showNoticeBar}
+                                rev={undefined}/>
                 </Badge>
             </div>
             <div className={styles.userbar_item}>
