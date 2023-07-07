@@ -2,6 +2,15 @@
 module.exports = {
     reactStrictMode: false,
     productionBrowserSourceMaps: true,
+    async redirects() {
+        return [
+            {
+                source: '/dashboard',
+                destination: '/',
+                permanent: true,
+            },
+        ]
+    },
     async rewrites() {
         return [
             {
