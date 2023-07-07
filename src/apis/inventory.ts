@@ -1,8 +1,8 @@
-import request from '../../network/fetchAPI'
+import request from '../network/fetchAPI'
 import {LoginForm} from "@/apis/userManagment";
 
 export type AllHistory = {
-    [key:string]: Array<HistoryList>
+    [key:string]: HistoryList
 }
 
 
@@ -37,38 +37,32 @@ export function getAllMaterialCurrentInventory(){
     })
 }
 
-export function getSingleMaterialHistory(param:string){
+export function getCertainMaterialHistory(materialName:string){
     return request<HistoryList>({ //string指返回的data中是string
-        url: '/basic/material/history' + param,
-        method: 'Get',
+        url: '/basic/material/history' + materialName,
+        method: 'GET',
     })
 }
 
 export function getAllMaterialHistory(){
     return request<AllHistory>({ //string指返回的data中是string
         url: '/basic/material/history',
-        method: 'Get',
-    })
-}
-
-export function getAllProductCurrentInventory(){
-    return request<ProductInventoryInfo>({ //string指返回的data中是string
-        url: '/basic/product/inventory',
         method: 'GET',
     })
 }
 
-export function getSingleProductHistory(param:string){
+
+export function getCertainProductHistory(productName:string){
     return request<AllHistory>({ //string指返回的data中是string
-        url: '/material/history' + param,
-        method: 'Get',
+        url: '/basic/material/history/' + productName,
+        method: 'GET',
     })
 }
 
 export function getAllProductHistory(){
     return request<AllHistory>({ //string指返回的data中是string
-        url: '/material/history',
-        method: 'Get',
+        url: '/basic/product/history',
+        method: 'GET',
     })
 }
 

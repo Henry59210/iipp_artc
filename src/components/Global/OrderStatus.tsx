@@ -1,6 +1,6 @@
 import {Timeline} from "antd";
 import {ClockCircleOutlined} from "@ant-design/icons";
-import {role as roleList} from "../../../authenticate/urlForm";
+import {role as roleList} from "../../authenticate/urlForm";
 import {useAppSelector} from "@/hooks";
 import {selectRole} from "@/features/user/userSlice";
 

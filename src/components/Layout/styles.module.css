@@ -58,7 +58,7 @@
     background: var(--back-color_container);
     box-sizing: border-box;
     padding: 10px 20px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .messagebox_init {

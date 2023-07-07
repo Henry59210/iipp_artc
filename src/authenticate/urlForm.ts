@@ -1,5 +1,5 @@
 export type UrlCollection = {
-    [ket:string] : string
+    [key:string] : string
 }
 
 export const role:{[key:string]: string[]} = {

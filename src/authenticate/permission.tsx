@@ -4,8 +4,8 @@ import {useAppDispatch, useAppSelector} from "@/hooks";
 import {useRouter} from "next/router";
 import {ReactNode, useEffect, useState} from "react";
 import NProgress from '@/utilities/mynprogress.js'
-import {Spin} from "antd";
 import {Loading} from "@/components/Global/Loading";
+import {chooseForm} from "./urlForm";
 
 
 const whiteList = ['/login']
@@ -14,6 +14,7 @@ export const Permission = ({children}:{children:ReactNode})=>{
     const dispatch = useAppDispatch()
     const router = useRouter()
     const hasUserInfo = useAppSelector(selectHasUserInfo)
+    const role = useAppSelector(selectRole)
     const [authorized, setAuthorized] = useState(false)
 
     useEffect(() => {
@@ -26,8 +27,14 @@ export const Permission = ({children}:{children:ReactNode})=>{
                     NProgress.done()
                 } else {
                     if(hasUserInfo) {
-                        setAuthorized(true)
-                        NProgress.done()
+                        const urlSet = new Set(Object.values(chooseForm(role)));
+                        if(urlSet.has(router.asPath)) {
+                            setAuthorized(true)
+                            NProgress.done()
+                        } else {
+                            await router.replace('/404')
+                            NProgress.done()
+                        }
                     } else {
                         await dispatch(getInfoAsync());
                         setAuthorized(true)
@@ -56,5 +63,5 @@ export const Permission = ({children}:{children:ReactNode})=>{
         };
     }, [hasToken, router, dispatch]);
 
-    return authorized ? <>{children}</> : (<Loading/>);
+    return authorized ? <>{children}</> : <Loading/>;
 }

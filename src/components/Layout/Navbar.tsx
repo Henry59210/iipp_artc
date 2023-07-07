@@ -2,17 +2,16 @@ import React, {ReactElement, ReactNode, useEffect, useState} from "react";
 import type {MenuProps} from 'antd';
 import {Avatar, Badge, Button, ConfigProvider, Drawer, Menu} from 'antd';
 import {useRouter} from "next/router";
-import {selectRole, selectUrlForm} from "@/features/user/userSlice";
-import {useAppSelector} from "@/hooks";
+import {loginAsync, logoutAsync, selectRole, selectUrlForm, selectUsername} from "@/features/user/userSlice";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import styles from "./styles.module.css"
-import {UserOutlined} from "@ant-design/icons";
 import Image from 'next/image'
 import dashboard from "@/pages/dashboard";
 import {
     BellFilled
 } from '@ant-design/icons';
 import {NoticeBar} from "@/components/Layout/NoticeBar";
-import {isFunction} from "@antv/util";
+
 
 const NavBar = () => {
     const [open, setOpen] = useState(false);
@@ -23,6 +22,7 @@ const NavBar = () => {
         setCurrent(Object.entries(urlForm).find(([key, value]) => value === router.asPath)?.[0] !)
     }, [urlForm])
     const items: MenuProps['items'] = []
+
     const showDrawer = () => {
         setOpen(true);
     };
@@ -71,8 +71,10 @@ export default NavBar;
 
 const UserBar = (props: {showNoticeBar: any}) => {
     const role = useAppSelector(selectRole)
-    const logout = () => {
-        console.log(this)
+    const userName = useAppSelector(selectUsername)
+    const dispatch = useAppDispatch()
+    const logout = async () => {
+        await dispatch(logoutAsync())
     }
     return (
         <div className={styles.userbar}>
@@ -83,7 +85,7 @@ const UserBar = (props: {showNoticeBar: any}) => {
             </div>
             <div className={styles.userbar_item}>
                 {/*<Avatar shape="square" size={56} icon={<UserOutlined />} />*/}
-                <Avatar size={64} style={{backgroundColor: '#fde3cf', color: '#f56a00'}}>{role}</Avatar>
+                <Avatar size={64} style={{backgroundColor: '#fde3cf', color: '#f56a00'}}>{userName}</Avatar>
             </div>
             <div className={styles.userbar_item}>
                 <div className={styles.userbar_item__info}>{role}</div>

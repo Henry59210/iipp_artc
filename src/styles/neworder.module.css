@@ -3,3 +3,29 @@
     height: 100%;
     display: flex;
 }
+.container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+.unconfirmed_order_container {
+    width: var(--staff-dashboard-order-width);
+    border-right: 2px solid #dcdcdc;
+    box-sizing: border-box;
+    padding-bottom: 10px;
+    overflow: auto;
+    position: relative;
+    color: var(--font-color);
+}
+.inventory_container {
+    width: var(--staff-dashboard-inventory-width);
+    border-right: 2px solid #dcdcdc;
+    box-sizing: border-box;
+    padding: 0 10px 10px 10px;
+    overflow: auto;
+    position: relative;
+}
+.unconfirmed_order_navbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}

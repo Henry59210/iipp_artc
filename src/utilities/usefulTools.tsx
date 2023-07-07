@@ -1,7 +1,7 @@
 import styles from "@/components/Global/styles.module.css";
 import React from "react";
 
-export const dateConvert = (originDate: string | Date, formate?: Array<string>) => {
+export const dateConvert = (originDate: string | Date | number, formate?: Array<string>) => {
     const date = new Date(originDate)
     let result: string = ''
     const checkForm: { [key: string]: number } = {
@@ -27,4 +27,14 @@ export const productFormatConvert = (productName: string) => {
         specification: !productName ? 'wrong' : productName.split(' ').slice(3).join(' ')
     }
 
+}
+
+export const deepEqual = (a: any,b: any) => {
+    if(a instanceof Object && b instanceof Object ) {
+        for(let i in a) {
+            if(b[i] === undefined) return false
+            else if(!deepEqual(a[i], b[i])) return false
+        }
+    } else return a===b
+    return true
 }

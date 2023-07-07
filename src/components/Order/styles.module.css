@@ -1,0 +1,31 @@
+.order_filter {
+    display: flex;
+    justify-content: right;
+    padding: 0 20px 20px 20px;
+}
+.form_item {
+    padding-top: 20px;
+    min-width: 10vw;
+}
+
+.form_item_input {
+    width: 10vw;
+}
+
+.form_item_date {
+    width: 15vw;
+}
+
+.form_item_select {
+    min-width: 120px;
+}
+
+.form {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    height: 100%;
+    padding-top: 20px;
+}

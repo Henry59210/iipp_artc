@@ -1,8 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {getToken, removeToken, setToken} from "../../../network/auth";
-import {login, LoginForm, UserInfo} from "../../apis/userManagment";
+import {getToken, removeToken, setToken} from "../../network/auth";
+import {getInfo, login, LoginForm, logOut, UserInfo} from "../../apis/userManagment";
 import {AppState} from "../../store";
-import {chooseForm, UrlCollection} from "../../../authenticate/urlForm";
+import {chooseForm, UrlCollection} from "../../authenticate/urlForm";
 
 export interface UserState {
     token: string | undefined
@@ -29,24 +29,24 @@ const initialState: UserState = getDefaultState()
 export const loginAsync = createAsyncThunk(
     'user/login',
     async (userInfo: LoginForm) => {
-        // const response = await login(userInfo)
-        // return response.data ? response.data : 'token error'
-        const data = 'userToken'
-        return data
+        const response = await login(userInfo)
+        return response.data ? response.data : 'token error'
     }
 )
 
 export const getInfoAsync = createAsyncThunk(
     'user/getInfo',
     async () => {
-        // const response = await getInfo()
-        // return response.data
-        const data:UserInfo = {
-            role: 'commercial',
-            username: 'commercial',
-            userId: '0001'
-        }
-        data.urlForm = chooseForm(data.role)
+        const {data} = await getInfo()
+        data!.urlForm = chooseForm(data!.role)
+        return data!
+    }
+)
+
+export const logoutAsync = createAsyncThunk(
+    'user/logout',
+    async () => {
+        const {data} = await logOut()
         return data
     }
 )
@@ -56,7 +56,7 @@ export const userSlice = createSlice({
     initialState,
     // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
-        resetToken: (state, action: PayloadAction<UserInfo> ) => {
+        resetToken: () => {
             removeToken() // must remove  token  first
             getDefaultState()
         }
@@ -70,12 +70,17 @@ export const userSlice = createSlice({
                     setToken(<string>action.payload)
             })
             .addCase(getInfoAsync.fulfilled, (state, action) =>{
-                const { role, username, userId, urlForm } = action.payload;
+                const { role, username, id, urlForm } = action.payload;
                 state.role = role;
                 state.username = username;
-                state.userId = userId;
+                state.userId = id;
                 state.urlForm = urlForm;
                 state.hasUserInfo = true
+            })
+            .addCase(logoutAsync.fulfilled, (state, action) => {
+                removeToken()
+                getDefaultState()
+                window.location.reload();
             })
     },
 })

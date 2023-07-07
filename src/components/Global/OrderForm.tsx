@@ -1,66 +1,203 @@
-import {Space, Table, Tag} from 'antd';
-import type {ColumnsType} from 'antd/es/table';
+import {Button, ConfigProvider, Popover, Space, Table, TablePaginationConfig, Tag} from 'antd';
+import type {ColumnsType, ColumnType} from 'antd/es/table';
+import React, {ReactNode, useRef, useState} from "react";
+import styles from "@/components/Global/styles.module.css";
+import {CombineProductItem, OrderInfo} from "@/apis/order";
+import {dateConvert} from "@/utilities/usefulTools";
 
-interface DataType {
-    id: string,
-    customerId: string,
-    orderDate: string,
-    expectedTime: string,
-    status: string,
-    productList: Array<{ id: string, productName: string, quantity: number }>
+type dataType<T> = T extends true ? CombineProductItem : OrderInfo
+
+const reference: { [key: string]: ColumnType<CombineProductItem | OrderInfo> } = {
+    id: {
+        title: 'Order Id',
+        dataIndex: 'id',
+        key: 'id',
+        align: 'center'
+    },
+    expectedTime: {
+        title: 'Expected Date',
+        dataIndex: 'expectedTime',
+        key: 'expectedTime',
+        align: 'center',
+        render: (_, record) =>
+            (
+                <div>
+                    {dateConvert((record as OrderInfo).expectedTime, ['YYYY','-','MM', '-', 'DD'])}
+                </div>
+            )
+    },
+    status: {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        align: 'center'
+    },
+    orderDate: {
+        title: 'Order Date',
+        dataIndex: 'orderDate',
+        key: 'orderDate',
+        align: 'center',
+        render: (_, record) =>
+            (
+                <div>
+                    {dateConvert((record as OrderInfo).expectedTime, ['YYYY','-','MM', '-', 'DD'])}
+                </div>
+            )
+    },
 }
-
-const data: DataType[] = [
-    {
-        id: '1234',
-        customerId: 'Singapore',
-        orderDate: '2020-3-4',
-        expectedTime: '2020-3-6',
-        status: 'wait for raw',
-        productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-    }, {
-        id: '1234',
-        customerId: 'Singapore',
-        orderDate: '2020-3-4',
-        expectedTime: '2020-3-6',
-        status: 'wait for raw',
-        productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-    }
-];
-
-export const OrderForm = (props: {
-    role: string, //根据角色请求不同数据
-    type: string, //根据type自定义表头以及最后一列的操作，定义能否多选
-    changePage?: Function, //分页函数
+export const OrderForm = ({expectColumn, data, checkbox, combine, selectedAction, action, node}: {
+    expectColumn?: Array<'id' | 'expectedTime' | 'status' | 'orderDate'>,
+    data: dataType<typeof combine>[],
+    checkbox: boolean,
+    selectedAction?: (selectedRows: OrderInfo[]) => void,
+    combine: boolean,
+    node: string[]
+    action: Function // open modal
 }) => {
+    const checkboxOpp = !checkbox
+    let expectArr: ColumnsType<CombineProductItem | OrderInfo> = []
 
-    const columns: ColumnsType<DataType> = [
-        {
-            title: 'Department',
-            dataIndex: 'customerId',
-            key: 'customerId',
+    if (expectColumn !== undefined) {
+        expectArr = expectColumn.map(item => reference[item])
+    }
+    const columns: ColumnsType<dataType<typeof combine>> = combine ? [
+            // {
+            //     title: 'Dep.',
+            //     dataIndex: 'customerId',
+            //     key: 'customerId',
+            //     align: 'center',
+            //     render: (text, record) => (<div>{text}</div>)
+            // },
+            {
+                title: 'Combo Id',
+                dataIndex: 'id',
+                key: 'id',
+                align: 'center'
+            },
+            // {
+            //     title: 'Expected Date',
+            //     dataIndex: 'expectedTime',
+            //     key: 'expectedTime',
+            //     align: 'center'
+            // },
+            {
+                title: 'Action',
+                key: 'action',
+                align: 'center',
+                render: (_, record) => <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: '#409EFF'
+                }}>
+                    {node.map((item, index) => <a key={index} onClick={() => {
+                        action(record, item)
+                    }}>{item}</a>)}
+                </div>,
+            },
+        ] :
+        expectColumn === undefined ? [
+            {
+                title: 'Dep.',
+                dataIndex: 'customerId',
+                key: 'customerId',
+                align: 'center',
+                render: (text, record) => (<div>{text}</div>)
+            },
+            {
+                title: 'Order Id',
+                dataIndex: 'id',
+                key: 'id',
+                align: 'center'
+            },
+            {
+                title: 'Expected Date',
+                dataIndex: 'expectedTime',
+                key: 'expectedTime',
+                align: 'center',
+                render: (_, record) =>
+                    (
+                        <div>
+                            {dateConvert((record as OrderInfo).expectedTime, ['YYYY','-','MM', '-', 'DD'])}
+                        </div>
+                    )
+            },
+            {
+                title: 'Status',
+                dataIndex: 'status',
+                key: 'status',
+                align: 'center'
+            },
+            {
+                title: 'Order Date',
+                dataIndex: 'orderDate',
+                key: 'orderDate',
+                align: 'center',
+                render: (_, record) =>
+                    (
+                        <div>
+                            {dateConvert((record as OrderInfo).expectedTime, ['YYYY','-','MM', '-', 'DD'])}
+                        </div>
+                    )
+            },
+            {
+                title: 'Action',
+                key: 'action',
+                align: 'center',
+                render: (_, record) => <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: '#409EFF'
+                }}>
+                    {
+                        node.map((item, index) => <a key={index} onClick={() => action(record, item)}>{item}</a>)
+                    }
+                </div>,
+            },
+        ] : [
+            {
+                title: 'Dep.',
+                dataIndex: 'customerId',
+                key: 'customerId',
+                width: 100,
+                align: 'center',
+                render: (text, record) => (<div>{text}</div>)
+            },
+            ...expectArr,
+            {
+                title: 'Action',
+                key: 'action',
+                align: 'center',
+                render: (_, record) => <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    color: '#409EFF'
+                }}>
+                    {
+                        node.map((item, index) => <a key={index} onClick={() => action(record, item)}>{item}</a>)
+                    }
+                </div>,
+            },]
+
+
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: dataType<typeof checkboxOpp>[]) => {
+            selectedAction!(selectedRows as OrderInfo[])
         },
-        {
-            title: 'Expected Date',
-            dataIndex: 'expectedTime',
-            key: 'expectedTime',
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <a>Detail</a>
-                </Space>
-            ),
-        },
-    ];
-    return <Table columns={columns} dataSource={data}/>
+    };
+    return <Table
+        rowKey={(record) => record.id}
+        columns={columns}
+        rowSelection={checkbox ? rowSelection : undefined}
+        pagination={false}
+        sticky={true}
+        dataSource={data}/>
+
 }
 
 

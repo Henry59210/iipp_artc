@@ -1,10 +1,12 @@
 import {getLayout, Layout} from "@/components/Layout";
-import {useState} from "react";
 import {Menu, MenuProps} from "antd";
 import styles from "@/styles/workbench.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {useAppSelector} from "@/hooks";
-import {selectCurrent, setLastTab} from "@/features/pageMemo/pageSlice";
+import {selectWorkbenchCurrent, setLastWorkbenchTab, WorkbenchTabs} from "@/features/pageMemo/pageSlice";
+import {PurchaseArea} from "@/components/Workbench/commercial/PurchaseArea";
+import {ProductionArea} from "@/components/Workbench/commercial/ProductionArea";
+import {ShipmentArea} from "@/components/Workbench/commercial/ShipmentArea";
 
 const items: MenuProps['items'] = [
     {
@@ -12,28 +14,30 @@ const items: MenuProps['items'] = [
         key: 'purchase',
     },
     {
-        label: 'production',
+        label: 'Production',
         key: 'production',
     },
     {
         label: 'Shipment',
-        key: 'Shipment',
+        key: 'shipment',
     },
 ];
 
 
 const WorkbenchCommercial = () => {
-    const lastTab = useAppSelector(selectCurrent)
+    const currentTab_workbench = useAppSelector(selectWorkbenchCurrent)
     // 修改数据
     const dispatch = useDispatch()
-    const [current, setCurrent] = useState('purchase');
-    const onClick: MenuProps['onClick'] = (e) => {
-        dispatch(setLastTab(e.key))
+    const currentComponent = ()=>
+        currentTab_workbench === 'purchase' ? <PurchaseArea/> : currentTab_workbench === 'production' ? <ProductionArea/> : <ShipmentArea/>
+    const selectTab: MenuProps['onClick'] = (e) => {
+        dispatch(setLastWorkbenchTab(e.key as WorkbenchTabs))
     };
     return (
         <>
-            <Menu className={styles.navbar} onClick={onClick} selectedKeys={[lastTab?lastTab:current]} mode="horizontal" items={items} />
+            <Menu className={styles.navbar} onClick={selectTab} selectedKeys={[currentTab_workbench]} mode="horizontal" items={items} />
             <div className={styles.container_commercial}>
+                {currentComponent()}
             </div>
         </>
     );

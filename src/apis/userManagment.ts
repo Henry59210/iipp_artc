@@ -1,4 +1,4 @@
-import request from '../../network/fetchAPI'
+import request from '../network/fetchAPI'
 
 export type LoginForm = {
     username: string
@@ -8,7 +8,7 @@ export type LoginForm = {
 export interface UserInfo {
     role: string
     username: string
-    userId: string
+    id: string
     [key:string]: any
 }
 
@@ -22,7 +22,14 @@ export function login(data: LoginForm){
 
 export function getInfo(){
     return request<UserInfo>({
-        url: '/getUserInfo',
+        url: '/basic/info',
         method: 'GET',
+    })
+}
+
+export function logOut(){
+    return request({
+        url: '/auth/logout',
+        method: 'POST',
     })
 }

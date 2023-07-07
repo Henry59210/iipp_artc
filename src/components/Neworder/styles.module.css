@@ -13,12 +13,7 @@
 /*inventory*/
 
 .inventory_container {
-    width: var(--staff-dashboard-inventory-width);
-    border-right: 2px solid #dcdcdc;
-    box-sizing: border-box;
-    padding: 0 10px 10px 10px;
-    overflow: scroll;
-    position: relative;
+   width: 100%;
 }
 
 .inventory_container::-webkit-scrollbar {
@@ -74,18 +69,20 @@
 
 /*order*/
 .unconfirmed_order_container {
-    width: var(--staff-dashboard-order-width);
-    border-right: 2px solid #dcdcdc;
-    box-sizing: border-box;
-    padding: 0 10px 10px 10px;
-    overflow: scroll;
-    position: relative;
+    width: 100%
+}
+.unconfirmed_order_navbar {
+    font-family: var(--country-font-family);
+    font-weight: bold;
     color: var(--font-color);
+    line-height: 50px;
+    height: 50px;
+    padding-left: 20px;
 }
 
 .unconfirmed_order_item {
     border: var(--global-border-style);
-    margin: 5px 10px 10px 10px;
+    margin: 5px 20px 10px 20px;
     border-radius: 5px;
     padding: 10px;
     background: white;
@@ -159,9 +156,11 @@
     width: 80%;
     height: 100%;
     padding: 10px 10px;
-    overflow: scroll;
+    overflow: hidden;
 }
-
+.order_items_container:hover {
+    overflow: auto;
+}
 .overview {
     width: 80%;
     text-align: right;
@@ -173,17 +172,12 @@
 }
 
 .overview_content {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*flex-wrap: wrap;*/
-    /*height: 80vh;*/
-    /*writing-mode: vertical-lr;*/
     padding: 20px;
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(6, auto);
     grid-column-gap: 40px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .unconfirmed_order_item_content__btn {

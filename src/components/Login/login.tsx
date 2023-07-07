@@ -1,10 +1,10 @@
 import styles from './styles.module.css'
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Form, Input} from "antd";
-import {getInfoAsync, loginAsync, selectRole} from "../../features/user/userSlice";
+import {loginAsync, selectRole} from "../../features/user/userSlice";
 import {useRouter} from 'next/router'
 import {LoginForm} from "../../apis/userManagment";
-import {useAppDispatch, useAppSelector} from "../../hooks";
+import {useAppDispatch} from "../../hooks";
 import {useState} from "react";
 
 const LoginBox = () => {

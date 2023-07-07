@@ -1,17 +1,18 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {UrlCollection} from "../../../authenticate/urlForm";
-import {getToken} from "../../../network/auth";
-import {UserInfo} from "@/apis/userManagment";
 import {AppState} from "@/store";
-import {userSlice} from "@/features/user/userSlice";
+
+export type WorkbenchTabs = 'purchase' | 'production' | 'shipment'
+export type unConfirmedOrderTabs = 'order' | 'forecast'
 
 export interface PageState {
-    current: string
+    workbenchCurrent: WorkbenchTabs
+    unconfirmedOrderCurrent: unConfirmedOrderTabs
 }
 
 const getDefaultState:()=>PageState =() => {
     return {
-        current: ''
+        workbenchCurrent: 'purchase',
+        unconfirmedOrderCurrent: 'order'
     }
 }
 
@@ -21,14 +22,21 @@ export const pageSlice = createSlice({
     name: 'page',
     initialState,
     reducers: {
-        setLastTab: (state, action: PayloadAction<string>)=>{
-            state.current = action.payload
+        setLastWorkbenchTab: (state, action: PayloadAction<WorkbenchTabs>)=>{
+            state.workbenchCurrent = action.payload
+        },
+        setLastUnconfirmedOrderTab: (state, action: PayloadAction<unConfirmedOrderTabs>)=>{
+            state.unconfirmedOrderCurrent = action.payload
         }
     }
 })
+//export actions, will be used in dispatch
+export const {setLastWorkbenchTab, setLastUnconfirmedOrderTab} = pageSlice.actions
 
-export const {setLastTab} = pageSlice.actions
+//get param in state
+export const selectWorkbenchCurrent = (state: AppState) => state.page.workbenchCurrent
 
-export const selectCurrent = (state: AppState) => state.page.current
+export const selectUnconfirmedOrderCurrent = (state: AppState) => state.page.unconfirmedOrderCurrent
+
 
 export default pageSlice.reducer

@@ -1,15 +1,18 @@
-import {NextPageWithLayout} from "../_app";
-import {useRouter} from "next/router";
-import {getLayout} from "@/components/Layout";
-import {OrderForm} from "@/components/Global/OrderForm";
-import styles from "@/styles/order.module.css"
-import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Modal, Pagination, Spin} from "antd";
+import styles from "@/components/Workbench/commercial/styles.module.css"
 import {OrderFilter} from "@/components/Order/OrderFilter";
-import {Dayjs} from "dayjs";
-import {getOrdersForCommercial, OrderInfo, OrderRequest} from "@/apis/order";
+import {OrderForm} from "@/components/Global/OrderForm";
+import {Button, message, Modal, Popconfirm, Popover, Spin} from "antd";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
-import {StatusDetails} from "@/components/Details/StatusDetails";
+import React, {useEffect, useRef, useState} from "react";
+import {
+    CombineOrderResponse, CombineProductItem,
+    getOrdersForCommercial,
+    getProductionCombineOrder,
+    OrderInfo,
+    OrderRequest, packageProductionOrder, ProductInfo, rollbackProductionOrder
+} from "@/apis/order";
+import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
+import {ItemText} from "@/components/Global/ItemText";
 
 // const data: OrderInfo[] = [
 //     {
@@ -17,42 +20,42 @@ import {StatusDetails} from "@/components/Details/StatusDetails";
 //         customerId: 'Singapore',
 //         orderDate: '2020-3-4',
 //         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
+//         status: 'wait for production',
 //         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
 //     }, {
 //         id: '2',
 //         customerId: 'Singapore',
 //         orderDate: '2020-3-4',
 //         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
+//         status: 'wait for production',
 //         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
 //     }, {
 //         id: '3',
 //         customerId: 'Singapore',
 //         orderDate: '2020-3-4',
 //         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
+//         status: 'wait for production',
 //         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
 //     }, {
 //         id: '4',
 //         customerId: 'Singapore',
 //         orderDate: '2020-3-4',
 //         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
+//         status: 'wait for production',
 //         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
 //     }, {
 //         id: '5',
 //         customerId: 'Singapore',
 //         orderDate: '2020-3-4',
 //         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
+//         status: 'wait for production',
 //         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
 //     }, {
 //         id: '6',
 //         customerId: 'Singapore',
 //         orderDate: '2020-3-4',
 //         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
+//         status: 'wait for production',
 //         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
 //     }, {
 //         id: '7',
@@ -197,94 +200,178 @@ import {StatusDetails} from "@/components/Details/StatusDetails";
 //     },
 // ];
 
-const Order: NextPageWithLayout = () => {
+const preData = {
+    orderId: '',
+    customerId: '',
+    expectedTimeBegin: '',
+    expectedTimeEnd: '',
+    orderDateBegin: '',
+    orderDateEnd: '',
+    status: 'Pending Notify PR'
+}
+//获取合并后的订单
+export const ProductionArea = () => {
     const [loading, setLoading] = useState(false)
-    const [data, setData] = useState<OrderInfo[]>([])
-    const [open, setOpen] = useState(false);
-    const currentPage = useRef(1)
-    const currentOrderStatusDetails = useRef<OrderInfo>({
-        customerId: "",
-        expectedTime: "",
-        id: "",
-        orderDate: "",
-        orderStatusHistoryList: [],
-        productList: [],
-        status: ""
-    })
-    const [limit, setLimit] = useState(10)
-    const [total, setTotal] = useState(0)
-    const filterRef = useRef<HTMLDivElement>(null);
-    const [filterData, setFilterData] = useState<OrderRequest>({
-        customerId: "",
-        expectedTimeBegin: "",
-        expectedTimeEnd: "",
-        orderDateBegin: "",
-        orderDateEnd: "",
-        orderId: "",
-        status: ""
-    })
+    const [orderData, setOrderData] = useState<OrderInfo[]>([])
+    const [combinedData, setCombinedData] = useState<CombineProductItem[]>([])
+    const [inventoryOpen, setInventoryOpen] = useState(false);
+    const [prodOpen, setProdOpen] = useState(false);
+    const currentId = useRef('')
+    const [selectedItems, setSelectedItems] = useState<OrderInfo[]>([]);
+    const selectedOrders = useRef<OrderInfo[]>([])
+    const [toProdOrder, setToProdOrder] = useState(false)
+    const hintText_left = 'Pending production'
+    const hintText_right = 'Pending production confirm'
+
+    useEffect(() => {
+        (async function () {
+            await getFilterData(preData)
+            await getCombinedData()
+        })()
+    }, [])
 
     const getFilterData = async (filterData: OrderRequest) => {
-        setFilterData(filterData)
         setLoading(true)
-        const res = await getOrdersForCommercial(filterData, {limit: limit, offset: currentPage.current})
+        const res = await getOrdersForCommercial(filterData, {limit: -1, offset: 1})
         if (res.data !== null) {
-            setTotal(res.data.total)
-            setData(res.data.records)
+            setOrderData(res.data.records)
             setLoading(false)
         }
     }
-    const changePage = async (page: number) => {
-        currentPage.current = page
-        await getFilterData(filterData)
+    const getCombinedData = async () => {
+        setLoading(true)
+        const res = await getProductionCombineOrder({limit: -1, offset: 1})
+        if (res.data !== null) {
+            setCombinedData(res.data.records)
+            setLoading(false)
+        }
     }
-    const changeSize = async (_: any, size: number) => {
-        setLimit(size)
-        await getFilterData(filterData)
-    }
-    const openModal = (record: OrderInfo, item: string) => {
-        currentOrderStatusDetails.current = record
-        setOpen(true)
+    //选中checkbox的回调
+    const getSelectedOrder = (selectedRows: OrderInfo[]) => {
+        selectedOrders.current = selectedRows
+        setSelectedItems(selectedRows)
+        setToProdOrder(Boolean(selectedRows.length))
     }
 
-    return (
-        <div className={styles.container}>
-            <div ref={filterRef}>
-                <OrderFilter type={'employee'} getFilterData={getFilterData} combine={false}/>
+    const openInventoryModal = ({id}: { id: string }) => {
+        currentId.current = id
+        setInventoryOpen(true)
+    }
+
+    const prodOrderOption = async ({id}: { id: string }, item: 'Rollback' | 'Detail') => {
+        if (item === 'Detail') {
+            currentId.current = id
+            setProdOpen(true)
+        } else if (item === 'Rollback') {
+            const res = await rollbackProductionOrder(id)
+            if (res.code === '200') {
+                await getFilterData(preData)
+                await getCombinedData()
+            }
+        }
+    }
+
+    //选中之后点击打包的回调
+    const generateProdOrder = async () => {
+        const selectedIds = selectedOrders.current.map(item => item.id)
+        const res = await packageProductionOrder(selectedIds)
+        if (res.code === '200') {
+            await getFilterData(preData)
+            await getCombinedData()
+        }
+    }
+
+    const generateSelectedDetail = () => {
+        const productList: { [key: string]: ProductInfo } = {}
+        selectedItems.forEach(item => {
+            item.productList.forEach(productInfo => {
+                if (productList[productInfo.id] === undefined) {
+                    productList[productInfo.id] = productInfo
+                } else {
+                    productList[productInfo.id].quantity += productInfo.quantity
+                }
+            })
+        })
+        return (
+            <div>
+                {Object.keys(productList).map(item => (
+                    <div key={item}>
+                        <ItemText title={productList[item].productName} value={productList[item].quantity}></ItemText>
+                    </div>)
+                )}
             </div>
-            <div className={styles.form_container}>
+        )
+    }
+    return (
+        <div className={styles.combo_container}>
+            {/*待生产订单*/}
+            <div className={styles.normal_order_container}>
+                <div className={styles.combo_container_filter}>
+                    <div>{hintText_left}</div>
+                    <Popconfirm
+                        icon={''}
+                        title=""
+                        okButtonProps={{style: {display: 'none'}}}
+                        showCancel={false}
+                        description={<OrderFilter type={'employee'} getFilterData={getFilterData} status={'Pending Notify PR'}
+                                                  combine={false}/>}
+                    >
+                        <Button style={{width: '100px'}}>Filter</Button>
+                    </Popconfirm>
+                </div>
+                <div className={styles.combo_container_form}>
+                    <Spin spinning={loading}>
+                        <OrderForm expectColumn={['id', 'expectedTime']} data={orderData} checkbox={true}
+                                   combine={false} selectedAction={getSelectedOrder}
+                                   node={['Detail']} action={openInventoryModal}/>
+                    </Spin>
+                </div>
+                <div className={`${styles.package_order} ${toProdOrder ? styles.package_order_active : ''}`}>
+                    {toProdOrder ?
+                        (
+                            <Popover content={generateSelectedDetail()} title="Summary">
+                                <Button onClick={generateProdOrder}>Package</Button>
+                            </Popover>
+                        )
+                        : null}
+                </div>
+                <Modal
+                    title="Inventory Details"
+                    centered
+                    destroyOnClose={true}
+                    open={inventoryOpen}
+                    footer={null}
+                    onOk={() => setInventoryOpen(false)}
+                    onCancel={() => setInventoryOpen(false)}
+                    width={1000}
+                >
+                    <InventoryDetails id={currentId.current}/>
+                </Modal>
+            </div>
+            {/*合并后的生产订单*/}
+
+            <div className={styles.package_order_container}>
                 <Spin spinning={loading}>
-                    <OrderForm
-                        data={data}
-                        checkbox={false}
-                        combine={false}
-                        node={['Detail']}
-                        action={openModal}
-                    />
+                    <div className={styles.combo_container_filter}>
+                        <div>{hintText_right}</div>
+                    </div>
+                    <div className={styles.combo_container_form}>
+                        <OrderForm data={combinedData} checkbox={false} combine={true} node={['Detail', 'Rollback']}
+                                   action={prodOrderOption}/>
+                    </div>
+                    <Modal
+                        title="Production Order Details"
+                        centered
+                        destroyOnClose={true}
+                        open={prodOpen}
+                        footer={null}
+                        onCancel={() => setProdOpen(false)}
+                        width={1200}
+                    >
+                        <CombineOrderDetails id={currentId.current} type={'production'}/>
+                    </Modal>
                 </Spin>
             </div>
-            <div className={styles.pagination_container}>
-                <Pagination
-                    current={currentPage.current}
-                    onShowSizeChange={changeSize}
-                    onChange={changePage}
-                    total={total}/>
-            </div>
-            <Modal
-                title="Inventory Details"
-                centered
-                open={open}
-                destroyOnClose={true}
-                onOk={() => setOpen(false)}
-                onCancel={() => setOpen(false)}
-                width={1000}
-            >
-                <StatusDetails orderInfo={currentOrderStatusDetails.current}/>
-            </Modal>
         </div>
-    )
+    );
 }
-
-export default Order
-
-Order.getLayout = getLayout

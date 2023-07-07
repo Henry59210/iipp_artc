@@ -6,7 +6,7 @@ import type {AppProps} from 'next/app'
 import store from '../store'
 import {NextPage} from "next";
 import React, {ReactElement, ReactNode} from "react";
-import {Permission} from "../../authenticate/permission";
+import {Permission} from "../authenticate/permission";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode

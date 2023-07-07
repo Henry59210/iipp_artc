@@ -8,5 +8,7 @@
 }
 .container_commercial {
     width: 100%;
+    box-sizing: border-box;
     height: calc(100% - 50px);
+    padding: 0 40px 40px 40px;
 }
