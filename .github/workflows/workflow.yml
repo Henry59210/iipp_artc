@@ -12,12 +12,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-      - name: Install Dependencies
-        run: npm install
-      - name: Build Application
-        run: npm run build
       - name: Copy files to server
         uses: easingthemes/ssh-deploy@main
         env:
