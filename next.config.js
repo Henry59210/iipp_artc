@@ -2,6 +2,7 @@
 module.exports = {
     reactStrictMode: false,
     productionBrowserSourceMaps: true,
+    output:"standalone",
     async redirects() {
         return [
             {

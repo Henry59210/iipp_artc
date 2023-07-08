@@ -34,8 +34,8 @@ export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterDat
         if (!values) return props.getFilterData(initialObj)
 
         const {orderId, customerId, expectedDate, orderDate, status} = values
-        const [expectedTimeBegin, expectedTimeEnd] = expectedDate ? expectedDate.map(item => item.format('YYYY-MM-DD-00:00:00')) : ['', '']
-        const [orderDateBegin, orderDateEnd] = orderDate ? orderDate.map(item => item.format('YYYY-MM-DD-00:00:00')) : ['', '']
+        const [expectedTimeBegin, expectedTimeEnd] = expectedDate ? expectedDate.map(item => item.format('YYYY-MM-DDT00:00:00')) : ['', '']
+        const [orderDateBegin, orderDateEnd] = orderDate ? orderDate.map(item => item.format('YYYY-MM-DDT00:00:00')) : ['', '']
         const obj: OrderRequest = {
             orderId: orderId ? orderId : '',
             customerId: customerId ? customerId : '',
