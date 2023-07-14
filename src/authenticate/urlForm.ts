@@ -25,6 +25,7 @@ const shipmentForm: UrlCollection = {
 }
 const customerForm: UrlCollection = {
     dashboard: '/dashboard',
+    shopping: '/shopping',
     order: '/order/customer'
 }
 

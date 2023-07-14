@@ -10,6 +10,8 @@ import {Dayjs} from "dayjs";
 import {getOrdersForCommercial, OrderInfo, OrderRequest} from "@/apis/order";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
 import {StatusDetails} from "@/components/Details/StatusDetails";
+import {useAppSelector} from "@/hooks";
+import {selectRole} from "@/features/user/userSlice";
 
 // const data: OrderInfo[] = [
 //     {
@@ -198,6 +200,7 @@ import {StatusDetails} from "@/components/Details/StatusDetails";
 // ];
 
 const Order: NextPageWithLayout = () => {
+    const role = useAppSelector(selectRole)
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<OrderInfo[]>([])
     const [open, setOpen] = useState(false);
@@ -250,7 +253,7 @@ const Order: NextPageWithLayout = () => {
     return (
         <div className={styles.container}>
             <div ref={filterRef}>
-                <OrderFilter type={'employee'} getFilterData={getFilterData} combine={false}/>
+                <OrderFilter type={role === 'customer' ? 'customer' : 'employee'} getFilterData={getFilterData} combine={false}/>
             </div>
             <div className={styles.form_container}>
                 <Spin spinning={loading}>

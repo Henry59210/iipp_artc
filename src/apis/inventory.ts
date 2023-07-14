@@ -14,11 +14,14 @@ export type HistoryList = Array<{
 
 export type ProductInventoryInfo = {
     createTime: string,
+    createUser: string,
     id: string,
     productName: string,
     productTypeId: string,
     quantity: number,
+    unreservedQuantity: number,
     updateTime: string,
+    updateUser: string,
 }
 
 export type MaterialInventoryInfo = {
@@ -66,3 +69,9 @@ export function getAllProductHistory(){
     })
 }
 
+export function getProductInventory() {
+    return request<ProductInventoryInfo[]>({
+        url: '/basic/product/inventory',
+        method: 'GET'
+    })
+}

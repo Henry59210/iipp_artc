@@ -83,7 +83,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
                               value={item.quantity}/>
                     <div style={{marginBottom: 15, marginLeft: 15}}>
                         <Popover content={generateMaterialHint(item)} title="Estimated materials consumption">
-                            <InfoCircleOutlined style={{color: 'gray', cursor: 'pointer'}} rev={undefined}/>
+                            <InfoCircleOutlined style={{color: 'gray', cursor: 'pointer'}}/>
                         </Popover>
                     </div>
                 </div>)

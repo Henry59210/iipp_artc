@@ -7,6 +7,8 @@ import {selectWorkbenchCurrent, setLastWorkbenchTab, WorkbenchTabs} from "@/feat
 import {PurchaseArea} from "@/components/Workbench/commercial/PurchaseArea";
 import {ProductionArea} from "@/components/Workbench/commercial/ProductionArea";
 import {ShipmentArea} from "@/components/Workbench/commercial/ShipmentArea";
+import {NextPage} from "next";
+import {NextPageWithLayout} from "@/pages/_app";
 
 const items: MenuProps['items'] = [
     {
@@ -24,7 +26,7 @@ const items: MenuProps['items'] = [
 ];
 
 
-const WorkbenchCommercial = () => {
+const WorkbenchCommercial: NextPageWithLayout = () => {
     const currentTab_workbench = useAppSelector(selectWorkbenchCurrent)
     // 修改数据
     const dispatch = useDispatch()

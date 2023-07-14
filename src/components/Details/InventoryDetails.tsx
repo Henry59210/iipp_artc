@@ -330,7 +330,7 @@ const InventoryForm = ({
                     title: () => (<div>Material
                         <Popover content='Materials list for unborn products'>
                             <InfoCircleOutlined style={{paddingLeft: '7px', color: '#b9b9b9', cursor: 'pointer'}}
-                                                rev={undefined}/>
+                                                />
                         </Popover></div>),
                     key: 'materialName',
                     dataIndex: 'materialName',
