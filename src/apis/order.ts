@@ -134,9 +134,9 @@ export type CombineOrderResponse<T> = {
 }
 
 
-export function getOrdersForCommercial(data: OrderRequest, param: { limit?: number, offset?: number }) {
+export function getOrdersForCommercial(data: OrderRequest, role: string, param: { limit?: number, offset?: number }) {
     return request<OrderResponse>({
-        url: '/commercial/order/page',
+        url: `/${role}/order/page`,
         method: 'POST',
         data,
         param

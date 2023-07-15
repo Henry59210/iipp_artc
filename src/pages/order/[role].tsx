@@ -230,7 +230,7 @@ const Order: NextPageWithLayout = () => {
     const getFilterData = async (filterData: OrderRequest) => {
         setFilterData(filterData)
         setLoading(true)
-        const res = await getOrdersForCommercial(filterData, {limit: limit, offset: currentPage.current})
+        const res = await getOrdersForCommercial(filterData, role, {limit: limit, offset: currentPage.current})
         if (res.data !== null) {
             setTotal(res.data.total)
             setData(res.data.records)
