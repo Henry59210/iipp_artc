@@ -2,7 +2,7 @@ import request from '../network/fetchAPI'
 
 export type CartItemType = {id: string, productId: string, productName: string, quantity: number}
 
-export function submitItemToShopCart(data:{productId: string, quantity: number}) {
+export function submitItemToShopCart(data:{productId: string, quantity: number, productName: string}) {
     return request({ //string指返回的data中是string
         url: '/customer/cart',
         method: 'POST',

@@ -12,8 +12,12 @@ import {InventoryDetails} from "@/components/Details/InventoryDetails";
 import {ItemText} from "@/components/Global/ItemText";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {StatusDetails} from "@/components/Details/StatusDetails";
+import {useAppSelector} from "@/hooks";
+import {selectRole} from "@/features/user/userSlice";
+import commercial from "@/pages/workbench/commercial";
 
 export const CombineOrderDetails = ({id, type}: { id: string, type: 'production' | 'shipment' }) => {
+    const role = useAppSelector(selectRole)
     const [detailOpen, setDetailOpen] = useState(false);
     const [current, setCurrent] = useState('product');
     const [combineDetailData, setCombineDetailData] = useState<CombineProductOrderDetail | CombineShipOrderDetail>({
@@ -30,7 +34,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
             key: 'product',
         },
         {
-            label: 'Expect Material Info',
+            label: role === 'commercial' ? 'Expect Material Info' : 'Material ( real | expected ) ',
             key: 'material',
         },
     ] : [{
@@ -43,7 +47,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
         (async () => {
             let res
             if(type === 'production') {
-                res = await getProductionCombineDetail(id)
+                res = await getProductionCombineDetail(id, role)
             } else {
                 res = await getShipCombineOrderDetail(id)
             }
@@ -54,6 +58,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
     }, [])
     const onClick: MenuProps['onClick'] = (e) => {
         setCurrent(e.key);
+        console.log(current)
     };
 
     const getOrderDetail = (record: any) => {
@@ -88,10 +93,11 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
                     </div>
                 </div>)
             })
-        } else if(current === 'material' && type === 'shipment' ) {
+        } else if(current === 'material') {
                 return (combineDetailData as CombineProductOrderDetail).materialRequiredList.map(item => <ItemText key={item.materialId}
                                                                                    title={item.materialName}
                                                                                    value={item.weight}
+                                                                                   actualUse={item.actualWeightUsed!}
                                                                                    unit={'KG'}/>)
         }
     }
@@ -99,7 +105,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
         <Spin spinning={combineDetailData.id === ''}>
             <div className={styles.combine_details_container}>
                 <div className={styles.orders_container}>
-                    <OrderForm data={combineDetailData.orderList} checkbox={false} combine={false}
+                    <OrderForm expectColumn={['id', 'expectedTime']} data={combineDetailData.orderList} checkbox={false} combine={false}
                                node={['Detail']}
                                action={getOrderDetail}></OrderForm>
                 </div>

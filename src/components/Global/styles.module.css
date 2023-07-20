@@ -19,22 +19,29 @@
 
 /*ItemText*/
 .order_items_text {
-    display: flex;
     font-size: 16px;
-    align-items: center;
     margin-bottom: 15px;
 }
 .title {
     position: relative;
     min-width: 150px;
+    display: inline-block;
+    vertical-align: text-top;
+    line-height: 18px;
 }
 .title:before {
+    content: ':';
     position: absolute;
     right: 0;
-    content: ':';
 }
 .value {
+    display: inline-block;
     margin-left: 10px;
+}
+.value_span:after {
+    content: '';
+    margin: 0 15px;
+    border-right: 1px #606266 solid;
 }
 
 /*OrderForm*/

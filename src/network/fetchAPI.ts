@@ -45,6 +45,13 @@ export default async function fetchApi<T>(myOptions: FetchOptions): Promise<Fetc
     try {
         const response = await fetch(basicInfo.baseURL + url, opt);
         //request finish
+        if(response.status === 401) {
+            new Promise(()=>{
+                store.dispatch(resetToken())
+            }).then(()=>{
+                window.location.reload();
+            })
+        }
         const res = await response.json();
         if (res.code !== '200') {
             if (res.code === '401'){

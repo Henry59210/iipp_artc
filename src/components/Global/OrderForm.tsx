@@ -63,8 +63,8 @@ export const OrderForm = ({expectColumn, data, checkbox, combine, selectedAction
     const columns: ColumnsType<dataType<typeof combine>> = combine ? [
             // {
             //     title: 'Dep.',
-            //     dataIndex: 'customerId',
-            //     key: 'customerId',
+            //     dataIndex: 'customerDept',
+            //     key: 'customerDept',
             //     align: 'center',
             //     render: (text, record) => (<div>{text}</div>)
             // },
@@ -100,8 +100,8 @@ export const OrderForm = ({expectColumn, data, checkbox, combine, selectedAction
         expectColumn === undefined ? [
             {
                 title: 'Dep.',
-                dataIndex: 'customerId',
-                key: 'customerId',
+                dataIndex: 'customerDept',
+                key: 'customerDept',
                 align: 'center',
                 render: (text, record) => (<div>{text}</div>)
             },
@@ -109,7 +109,7 @@ export const OrderForm = ({expectColumn, data, checkbox, combine, selectedAction
                 title: 'Order Id',
                 dataIndex: 'id',
                 key: 'id',
-                align: 'center'
+                align: 'center',
             },
             {
                 title: 'Expected Date',
@@ -160,8 +160,8 @@ export const OrderForm = ({expectColumn, data, checkbox, combine, selectedAction
         ] : [
             {
                 title: 'Dep.',
-                dataIndex: 'customerId',
-                key: 'customerId',
+                dataIndex: 'customerDept',
+                key: 'customerDept',
                 width: 100,
                 align: 'center',
                 render: (text, record) => (<div>{text}</div>)

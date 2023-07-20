@@ -9,6 +9,7 @@ import {ProductionArea} from "@/components/Workbench/commercial/ProductionArea";
 import {ShipmentArea} from "@/components/Workbench/commercial/ShipmentArea";
 import {NextPage} from "next";
 import {NextPageWithLayout} from "@/pages/_app";
+import {useEffect} from "react";
 
 const items: MenuProps['items'] = [
     {
@@ -30,6 +31,9 @@ const WorkbenchCommercial: NextPageWithLayout = () => {
     const currentTab_workbench = useAppSelector(selectWorkbenchCurrent)
     // 修改数据
     const dispatch = useDispatch()
+    useEffect(()=>{
+        if(currentTab_workbench === '') dispatch(setLastWorkbenchTab('purchase'))
+    },[])
     const currentComponent = ()=>
         currentTab_workbench === 'purchase' ? <PurchaseArea/> : currentTab_workbench === 'production' ? <ProductionArea/> : <ShipmentArea/>
     const selectTab: MenuProps['onClick'] = (e) => {

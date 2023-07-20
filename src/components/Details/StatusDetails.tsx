@@ -13,27 +13,12 @@ const {Title} = Typography;
 
 export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined }) => {
     const [isConfirmed, setIsConfirmed] = useState(false)
-    // orderInfo = {
-    //     customerId: "", expectedTime: "", id: "", orderDate: "", productList: [], status: "",
-    //     orderStatusHistoryList: [
-    //         "New Order",
-    //         "Pending RM",
-    //         "Pending Notify PR",
-    //         "Pending PR confirmed",
-    //         "PR confirmed",
-    //         "Production Finished",
-    //         "Pending Shipment Confirmed",
-    //         "Shipment Confirmed",
-    //         "Shipment Arranged",
-    //     ]
-    // }
     const generateTimeline = () => {
         const timeline: TimelineItemProps[] | undefined = []
         if (orderInfo === undefined) {
             return []
         } else {
             const statusHistory = orderInfo.orderStatusHistoryList
-
             timeline.push({
                 color: 'green',
                 children: 'New Order',
@@ -43,6 +28,7 @@ export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined })
             } else {
                 let referenceForm = Object.keys(statusOrderList)
                 for (let i = statusOrderList[statusHistory[1]]; i < referenceForm.length; i++) {
+                    console.log(referenceForm[i])
                     timeline.push(i < (statusHistory.length + statusOrderList[statusHistory[1]] - 1) ? {
                             color: 'green',
                             children: referenceForm[i]
@@ -71,7 +57,7 @@ export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined })
                 <Col span={14}>
                     <Space direction="vertical" size="middle">
                         <li>{orderInfo.id}</li>
-                        <li>{orderInfo.customerId}</li>
+                        <li>{orderInfo.customerDept}</li>
                         <li>{dateConvert(orderInfo.expectedTime,['YYYY','-','MM','-','DD'])}</li>
                         <li>{dateConvert(orderInfo.orderDate,['YYYY','-','MM','-','DD'])}</li>
                     </Space>
@@ -100,7 +86,7 @@ export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined })
                 <div className={styles.summary_items_container}>
                     {
                         orderInfo === undefined ? null
-                            : orderInfo.productList.map(item => <ItemText
+                            : orderInfo.productList.map(item => <ItemText key={item.id}
                                 title={item.productName} value={item.quantity}/>)
                     }
                 </div>

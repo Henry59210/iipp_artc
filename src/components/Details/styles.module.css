@@ -29,7 +29,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     padding-bottom: 50px;
 }
 
@@ -140,13 +140,13 @@
 }
 
 .orders_container {
-    flex: 5;
+    flex: 7;
     margin: 10px;
     border: 1px solid #a9a9a9;
 }
 
 .summary_container {
-    flex: 3;
+    flex: 5;
     margin: 10px;
     border: 1px solid #a9a9a9;
 }

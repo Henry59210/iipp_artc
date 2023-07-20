@@ -4,7 +4,7 @@ import {OrderStatus} from "@/components/Global/statusList";
 
 export type OrderRequest = {
     orderId: string,
-    customerId: string,
+    customerDept: string,
     expectedTimeBegin: string,
     expectedTimeEnd: string,
     orderDateBegin: string,
@@ -24,6 +24,7 @@ export type OrderResponse = {
 
 export type OrderInfo = {
     customerId: string
+    customerDept: string
     expectedTime: string
     id: string
     orderDate: string
@@ -37,10 +38,11 @@ export type ProductInfo = {
     productName: string
     quantity: number
 }
-type MaterialInfo = {
+export type MaterialInfo = {
     materialId: string,
     materialName: string,
-    weight: number
+    weight: number,
+    actualWeightUsed?: number|null
 }
 
 export type ProductInventoryItem = {
@@ -59,8 +61,7 @@ export type DemandMaterialListItem = {
     purchaseDemand: number
 }
 
-export interface OrderDetail extends Omit<OrderInfo, "productList"> {
-    type: string
+export interface OrderDetail extends Omit<OrderInfo, "productList" | "orderStatusHistoryList"> {
     executableState: string
     productDetailList: Array<ProductInventoryItem>
     demandMaterialList: Array<DemandMaterialListItem>
@@ -97,6 +98,7 @@ export type CombineShipItemOrders = {
     createTime: string,
     createUser: string,
     customerId: string,
+    customerDept: string
     expectedTime: string,
     id: string,
     orderDate: string,
@@ -133,6 +135,12 @@ export type CombineOrderResponse<T> = {
     total: 0
 }
 
+export function getDepartment() {
+    return request<string[]>({
+        url: '/basic/info/get-dept-list',
+        method: 'GET',
+    })
+}
 
 export function getOrdersForCommercial(data: OrderRequest, role: string, param: { limit?: number, offset?: number }) {
     return request<OrderResponse>({
@@ -143,9 +151,9 @@ export function getOrdersForCommercial(data: OrderRequest, role: string, param: 
     })
 }
 
-export function getOrderInventoryDetail(orderId: string) {
+export function getOrderInventoryDetail(orderId: string, role:string) {
     return request<OrderDetail>({
-        url: '/commercial/order/' + orderId,
+        url: `/${role}/order/` + orderId,
         method: 'GET'
     })
 }
@@ -179,9 +187,9 @@ export function getProductionCombineOrder(param: { limit?: number, offset?: numb
     })
 }
 
-export function getProductionCombineDetail(combineId: string) {
+export function getProductionCombineDetail(combineId: string, role: string) {
     return request<CombineProductOrderDetail>({
-        url: '/commercial/production/' + combineId,
+        url: `/${role}/production/detail/` + combineId,
         method: 'GET',
     })
 }
@@ -204,6 +212,36 @@ export function packageShipOrder(data: string[]) {
     return request({
         url: '/commercial/ship/submit-order',
         method: 'POST',
+        data
+    })
+}
+//For production
+export function getProductionOrder(data:{id?: string, isFinished?: boolean}, param: { limit?: number, offset?: number }) {
+    return request<CombineOrderResponse<CombineProductItem>>({
+        url: '/production/production/page',
+        method: 'POST',
+        data,
+        param
+    })
+}
+export function getExpectedOrderData(param: string) {
+    return request<Omit<CombineProductOrderDetail, 'id'|'orderList'>>({
+        url: '/production/production/' + param,
+        method: 'GET',
+    })
+}
+export function modifyMaterialInventory(data:Array<{materialId: string, productionId:string, weight: number}>) {
+    return request<string>({
+        url: '/production/inventory/material',
+        method: 'PUT',
+        data
+    })
+}
+
+export function finishOrder(data:Array<string>) {
+    return request<string>({
+        url: '/production/production',
+        method: 'PUT',
         data
     })
 }

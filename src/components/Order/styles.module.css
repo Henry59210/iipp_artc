@@ -9,7 +9,7 @@
 }
 
 .form_item_input {
-    width: 10vw;
+    min-width: 120px;
 }
 
 .form_item_date {

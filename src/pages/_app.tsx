@@ -5,7 +5,7 @@ import type {AppProps} from 'next/app'
 
 import store from '../store'
 import {NextPage} from "next";
-import React, {ReactElement, ReactNode} from "react";
+import React, {ReactElement, ReactNode, useState} from "react";
 import {Permission} from "../authenticate/permission";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -17,6 +17,7 @@ type AppPropsWithLayout = AppProps & {
 
 export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
     const getLayout = Component.getLayout || ((page) => page)
+    const [a, setA] = useState(false)
 
     return (
         <Provider store={store}>

@@ -13,123 +13,19 @@ import {dateConvert, deepEqual} from "@/utilities/usefulTools";
 import {ItemText} from "@/components/Global/ItemText";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
 import {code} from "@antv/g2/lib/geometry/label/layout/worker/hide-overlap";
+import {useAppSelector} from "../../hooks";
+import {selectRole} from "../../features/user/userSlice";
+import { isEqual } from 'lodash';
 
-
-
-// const testData: Array<OrderInfo> = [
-//     {
-//         customerId: "Singapore",
-//         expectedTime: "2023-04-26T08:29:22.081Z",
-//         id: "1124434426524",
-//         orderDate: "2023-04-26T08:29:22.081Z",
-//         productList: [
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             }
-//         ],
-//         status: "unconfirmed"
-//     },
-//     {
-//         customerId: "China",
-//         expectedTime: "2023-04-26T08:29:22.081Z",
-//         id: "1164233426524",
-//         orderDate: "2023-04-26T08:29:22.081Z",
-//         productList: [
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             }, {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 1000
-//             },
-//
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 10
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 10
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 10
-//             },
-//             {
-//                 id: "string",
-//                 productName: "MIX CHOC DRINK KR 560G 16/CS",
-//                 quantity: 10
-//             },
-//         ],
-//         status: "unconfirmed"
-//     }
-//
-// ]
 const orderHint: string = 'Unconfirmed Order List:'
 const forecastHint: string = 'Forecast Order List:'
 
 export const UnconfirmedOrder = ({type}:{type: 'order' | 'forecast'}) => {
+    const role = useAppSelector(selectRole)
     const [orderList, setOrderList] = useState<Array<OrderInfo>>([])
     const [loading, setLoading] = useState(false)
     const newOrderRequest:OrderRequest = {
-        customerId: "",
+        customerDept: "",
         expectedTimeBegin: "",
         expectedTimeEnd: "",
         orderDateBegin: "",
@@ -139,7 +35,7 @@ export const UnconfirmedOrder = ({type}:{type: 'order' | 'forecast'}) => {
     }
     const getOrdersList = async () => {
         setLoading(true)
-        const res = await getOrdersForCommercial(newOrderRequest, {limit: -1, offset: 1})
+        const res = await getOrdersForCommercial(newOrderRequest, role, {limit: -1, offset: 1})
         if (res.data !== null && res.code === '200') {
             setOrderList(res.data.records)
             setLoading(false)
@@ -165,17 +61,17 @@ export const UnconfirmedOrder = ({type}:{type: 'order' | 'forecast'}) => {
 }
 
 const UnconfirmedOrderItem = ({orderInfo, confirmedFunction}:{orderInfo: OrderInfo, confirmedFunction: ()=>void}) => {
+    const role = useAppSelector(selectRole)
     const [open, setOpen] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const orderDetail = useRef<OrderDetail>({
-        orderStatusHistoryList: [],
         customerId: "",
+        customerDept: "",
         executableState: "",
         expectedTime: "",
         id: "",
         orderDate: "",
         status: "",
-        type: "",
         productDetailList: [],
         demandMaterialList: []
     })
@@ -190,22 +86,23 @@ const UnconfirmedOrderItem = ({orderInfo, confirmedFunction}:{orderInfo: OrderIn
         }
     }
     const checkConfirmStatus = async ()=>{
-        const res = await getOrderInventoryDetail(id)
-        setIsUpdate(!deepEqual(res.data, orderDetail))
-        if(deepEqual(res.data, orderDetail)) {
+        const res = await getOrderInventoryDetail(id, role)
+        setIsUpdate(!isEqual(res.data?.productDetailList, orderDetail.current.productDetailList))
+        console.log(isEqual(res.data?.productDetailList, orderDetail.current.productDetailList))
+        if(isEqual(res.data?.productDetailList, orderDetail.current.productDetailList)) {
             await sendConfirm()
         } else {
             orderDetail.current = res.data!
         }
     }
     const openDetail = async ()=>{
-        const res = await getOrderInventoryDetail(id)
+        const res = await getOrderInventoryDetail(id, role)
         if(res.data !== null) {
             orderDetail.current = res.data
             setOpen(true)
         }
     }
-    const {customerId, expectedTime, id, orderDate, productList, status} = orderInfo
+    const {customerDept, expectedTime, id, orderDate, productList, status} = orderInfo
     return (
         <>
             <div className={styles.unconfirmed_order_item}>
@@ -213,7 +110,7 @@ const UnconfirmedOrderItem = ({orderInfo, confirmedFunction}:{orderInfo: OrderIn
                 <div className={styles.unconfirmed_order_item_id}>{'ID: ' + id}</div>
                 {/*中间部分+信息+按钮*/}
                 <div className={styles.unconfirmed_order_item_content}>
-                    <div className={styles.unconfirmed_order_item_content__dep}>{customerId}</div>
+                    <div className={styles.unconfirmed_order_item_content__dep}>{customerDept}</div>
                     <div className={styles.unconfirmed_order_item_content__info}>
                         <Popover placement="right"
                                  content={<div className={styles.overview_content}>{productList.map(item => <ItemText

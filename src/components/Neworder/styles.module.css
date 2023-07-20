@@ -107,6 +107,7 @@
 
 .unconfirmed_order_item_content__dep {
     flex: 2;
+    max-width: 100px;
     font-weight: bold;
     position: relative;
 }

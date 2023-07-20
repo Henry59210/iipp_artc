@@ -17,7 +17,7 @@ export const ProductItem = ({productTypeId, productName, unreservedQuantity,edit
         })
     }
     const submitToShoppingCart = async () => {
-        await submitItemToShopCart({productId: productTypeId, quantity: quantity.current})
+        await submitItemToShopCart({productId: productTypeId, quantity: quantity.current, productName: productName})
         await updateCart()
     }
     return (

@@ -1,15 +1,15 @@
 import styles from "@/components/Order/styles.module.css";
-import {Button, DatePicker, Form, Input, Select} from "antd";
+import {Button, DatePicker, Form, Input, Select, SelectProps} from "antd";
 import {useEffect, useState} from "react";
 
 const {RangePicker} = DatePicker;
 import {Dayjs} from "dayjs";
-import {OrderRequest} from "@/apis/order";
+import {getDepartment, OrderRequest} from "@/apis/order";
 import {orderStatus} from "@/components/Global/statusList";
 
 export type Filter = {
     orderId: string,
-    customerId: string,
+    customerDept: string,
     expectedDate: Dayjs[],
     orderDate: Dayjs[],
     status: string
@@ -17,14 +17,30 @@ export type Filter = {
 
 export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterData: (obj: OrderRequest) => void, status?: string, combine: boolean }) => {
     const [form] = Form.useForm();
+    const [allDept, setAllDept] = useState<SelectProps['options'] >([])
+
+    const deptOptions: SelectProps['options'] = [];
+
     useEffect(() => {
+        (async function(){
+            await getDeptOptions()
+        })()
         onFinish()
     }, [])
 
+    const getDeptOptions = async () => {
+        const res = await getDepartment()
+        if(res.data !== null) {
+            res.data.forEach(item=>{
+                deptOptions.push({label: item, value: item})
+            })
+            setAllDept(deptOptions)
+        }
+    }
     const onFinish = (values?: Filter) => {
         const initialObj: OrderRequest = {
             orderId: '',
-            customerId: '',
+            customerDept: '',
             expectedTimeBegin: '',
             expectedTimeEnd: '',
             orderDateBegin: '',
@@ -33,12 +49,12 @@ export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterDat
         }
         if (!values) return props.getFilterData(initialObj)
 
-        const {orderId, customerId, expectedDate, orderDate, status} = values
+        const {orderId, customerDept, expectedDate, orderDate, status} = values
         const [expectedTimeBegin, expectedTimeEnd] = expectedDate ? expectedDate.map(item => item.format('YYYY-MM-DDT00:00:00')) : ['', '']
         const [orderDateBegin, orderDateEnd] = orderDate ? orderDate.map(item => item.format('YYYY-MM-DDT00:00:00')) : ['', '']
         const obj: OrderRequest = {
             orderId: orderId ? orderId : '',
-            customerId: customerId ? customerId : '',
+            customerDept: customerDept ? customerDept : '',
             expectedTimeBegin,
             expectedTimeEnd,
             orderDateBegin,
@@ -63,10 +79,17 @@ export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterDat
                 </Form.Item>
                 {props.type === 'employee' ? <Form.Item
                     label="Department"
-                    name="customerId"
+                    name="customerDept"
                     className={styles.form_item}
                 >
-                    <Input className={styles.form_item_input} placeholder="Enter department"/>
+                    <Select
+                        className={styles.form_item_input}
+                        mode="multiple"
+                        allowClear
+                        placeholder="Please select"
+                        options={allDept}
+                    />
+                    {/*<Input className={styles.form_item_input} placeholder="Enter department"/>*/}
                 </Form.Item> : null}
                 <Form.Item
                     label="Expect Date:"

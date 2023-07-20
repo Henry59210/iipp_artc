@@ -6,184 +6,9 @@ import type {ColumnsType} from 'antd/es/table';
 import {InfoCircleOutlined} from '@ant-design/icons';
 import {productFormatConvert} from "@/utilities/usefulTools";
 import {func} from "prop-types";
+import {useAppSelector} from "@/hooks";
+import {selectRole} from "@/features/user/userSlice";
 
-// const testData:OrderDetail = {
-//     id: "string",
-//     status: "purchase",
-//     type: "order",
-//     orderDate: "string",
-//     expectedTime: "string",
-//     customerId: 'India',
-//     executableState: 'need production',
-//     productDetailList: [
-//         {
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },
-//         {
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },{
-//             inventoryQuantity: 0,
-//             materialList: [
-//                 {
-//                     materialId: "a",
-//                     materialName: "a",
-//                     weight: 0
-//                 }
-//             ],
-//             needQuantity: 0,
-//             orderQuantity: 0,
-//             productId: "a",
-//             productName: "a"
-//         },],
-//     demandMaterialList: [
-//         {
-//             demandWeight: 0,
-//             inventoryWeight: 0,
-//             materialId: "string",
-//             materialName: "string",
-//             purchaseDemand: 0
-//         }
-//     ]
-// }
 
 const status2color: { [key: string]: string } = {
     purchase: 'red',
@@ -192,16 +17,16 @@ const status2color: { [key: string]: string } = {
 }
 
 export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, id?: string }) => {
+    const role = useAppSelector(selectRole)
     const [unconfirmedOrderStatus, setUnconfirmedOrderStatus] = useState<'purchasing' | 'producing' | 'shipment'>('purchasing')
     const [_orderDetail, setOrderDetail] = useState<OrderDetail>({
         customerId: "",
+        customerDept: "",
         executableState: "",
         expectedTime: "",
         id: "",
         orderDate: "",
         status: "",
-        orderStatusHistoryList: [],
-        type: "",
         productDetailList: [],
         demandMaterialList: []
     })
@@ -209,7 +34,7 @@ export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, 
         if(id !== undefined && orderDetail === undefined) {
             (async function(){
                 console.log('id',id)
-                const res = await getOrderInventoryDetail(id)
+                const res = await getOrderInventoryDetail(id, role)
                 if(res.data !== null) {
                     setOrderDetail(res.data)
                     setUnconfirmedOrderStatus(generateStatus(res.data))
@@ -226,8 +51,8 @@ export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, 
     const generateStatus = (data:OrderDetail) => {
         const referForm:{[key:string]: 'purchasing' | 'producing' | 'shipment'} = {
             'Deliverable': 'shipment',
-            'need production': 'producing',
-            'need procurement': 'purchasing'
+            'Need production': 'producing',
+            'Need procurement': 'purchasing'
         }
         return referForm[data.executableState]
     }
@@ -236,9 +61,9 @@ export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, 
             <Spin spinning={_orderDetail.id===''}>
                 <div className={styles.inventory_container}>
                     <div className={styles.inventory_container_title}>
-                        <div className={styles.inventory_container_title__country}>{_orderDetail.customerId}</div>
+                        <div className={styles.inventory_container_title__country}>{_orderDetail.customerDept}</div>
                         <div className={styles.inventory_container_title__info}>
-                            <div>type: <span className={styles.type}>{_orderDetail.type}</span></div>
+                            {/*<div>type: <span className={styles.type}>{_orderDetail.type}</span></div>*/}
                             <div>status: <span style={{color: 'black'}}>waiting for</span> <span
                                 style={{
                                     color: status2color[unconfirmedOrderStatus],
@@ -263,7 +88,7 @@ export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, 
     )
 }
 
-function nameRender(text: string) {
+export function nameRender(text: string) {
     return (<div>
         <span style={{
             fontWeight: 'bolder',

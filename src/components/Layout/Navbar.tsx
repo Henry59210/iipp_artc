@@ -11,6 +11,7 @@ import {
     BellFilled
 } from '@ant-design/icons';
 import {NoticeBar} from "@/components/Layout/NoticeBar";
+import {reset} from "@/features/pageMemo/pageSlice";
 
 
 const NavBar = () => {
@@ -74,14 +75,14 @@ const UserBar = (props: {showNoticeBar: any}) => {
     const userName = useAppSelector(selectUsername)
     const dispatch = useAppDispatch()
     const logout = async () => {
+        dispatch(reset())//reset current tab
         await dispatch(logoutAsync())
     }
     return (
         <div className={styles.userbar}>
             <div className={styles.userbar_notification}>
                 <Badge count={99}>
-                    <BellFilled className={styles.userbar_notification__icon} onClick={props.showNoticeBar}
-                               />
+                    <BellFilled className={styles.userbar_notification__icon} onClick={props.showNoticeBar}/>
                 </Badge>
             </div>
             <div className={styles.userbar_item}>

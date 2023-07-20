@@ -13,204 +13,21 @@ import {
 } from "@/apis/order";
 import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
 import {ItemText} from "@/components/Global/ItemText";
-
-// const data: OrderInfo[] = [
-//     {
-//         id: '1',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for production',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '2',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for production',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '3',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for production',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '4',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for production',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '5',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for production',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '6',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for production',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '7',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '8',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '9',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '10',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '11',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '12',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '13',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '14',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '15',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '16',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '17',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '18',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '19',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '20',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '21',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '22',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '23',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '24',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '25',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     }, {
-//         id: '26',
-//         customerId: 'Singapore',
-//         orderDate: '2020-3-4',
-//         expectedTime: '2020-3-6',
-//         status: 'wait for raw',
-//         productList: [{id: '2222', productName: 'MIX CHOC DRINK KR 560G 16/CS', quantity: 4000}]
-//     },
-// ];
+import {useAppSelector} from "@/hooks";
+import {selectRole} from "@/features/user/userSlice";
 
 const preData = {
     orderId: '',
-    customerId: '',
+    customerDept: '',
     expectedTimeBegin: '',
     expectedTimeEnd: '',
     orderDateBegin: '',
     orderDateEnd: '',
-    status: 'Pending Notify PR'
+    status: 'Pending Notify Prod'
 }
 //获取合并后的订单
 export const ProductionArea = () => {
+    const role = useAppSelector(selectRole)
     const [loading, setLoading] = useState(false)
     const [orderData, setOrderData] = useState<OrderInfo[]>([])
     const [combinedData, setCombinedData] = useState<CombineProductItem[]>([])
@@ -232,7 +49,7 @@ export const ProductionArea = () => {
 
     const getFilterData = async (filterData: OrderRequest) => {
         setLoading(true)
-        const res = await getOrdersForCommercial(filterData, {limit: -1, offset: 1})
+        const res = await getOrdersForCommercial(filterData, role, {limit: -1, offset: 1})
         if (res.data !== null) {
             setOrderData(res.data.records)
             setLoading(false)
@@ -313,7 +130,8 @@ export const ProductionArea = () => {
                         title=""
                         okButtonProps={{style: {display: 'none'}}}
                         showCancel={false}
-                        description={<OrderFilter type={'employee'} getFilterData={getFilterData} status={'Pending Notify PR'}
+                        description={<OrderFilter type={'employee'} getFilterData={getFilterData}
+                                                  status={'Pending Notify Prod'}
                                                   combine={false}/>}
                     >
                         <Button style={{width: '100px'}}>Filter</Button>
@@ -349,28 +167,28 @@ export const ProductionArea = () => {
                 </Modal>
             </div>
             {/*合并后的生产订单*/}
-
             <div className={styles.package_order_container}>
-                <Spin spinning={loading}>
-                    <div className={styles.combo_container_filter}>
-                        <div>{hintText_right}</div>
-                    </div>
-                    <div className={styles.combo_container_form}>
+                <div className={styles.combo_container_filter}>
+                    <div>{hintText_right}</div>
+                </div>
+                <div className={styles.combo_container_form}>
+                    <Spin spinning={loading}>
                         <OrderForm data={combinedData} checkbox={false} combine={true} node={['Detail', 'Rollback']}
                                    action={prodOrderOption}/>
-                    </div>
-                    <Modal
-                        title="Production Order Details"
-                        centered
-                        destroyOnClose={true}
-                        open={prodOpen}
-                        footer={null}
-                        onCancel={() => setProdOpen(false)}
-                        width={1200}
-                    >
-                        <CombineOrderDetails id={currentId.current} type={'production'}/>
-                    </Modal>
-                </Spin>
+                    </Spin>
+
+                </div>
+                <Modal
+                    title="Production Order Details"
+                    centered
+                    destroyOnClose={true}
+                    open={prodOpen}
+                    footer={null}
+                    onCancel={() => setProdOpen(false)}
+                    width={1200}
+                >
+                    <CombineOrderDetails id={currentId.current} type={'production'}/>
+                </Modal>
             </div>
         </div>
     );

@@ -11,4 +11,6 @@
     box-sizing: border-box;
     height: calc(100% - 50px);
     padding: 0 40px 40px 40px;
+    position: absolute;
+    overflow: auto;
 }
