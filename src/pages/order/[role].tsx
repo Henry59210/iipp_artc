@@ -29,23 +29,23 @@ const Order: NextPageWithLayout = () => {
         productList: [],
         status: ""
     })
-    const [limit, setLimit] = useState(10)
+    const limit = useRef(10)
     const [total, setTotal] = useState(0)
     const filterRef = useRef<HTMLDivElement>(null);
     const [filterData, setFilterData] = useState<OrderRequest>({
-        customerDept: "",
+        customerDept: [],
         expectedTimeBegin: "",
         expectedTimeEnd: "",
         orderDateBegin: "",
         orderDateEnd: "",
         orderId: "",
-        status: ""
+        status: []
     })
 
     const getFilterData = async (filterData: OrderRequest) => {
         setFilterData(filterData)
         setLoading(true)
-        const res = await getOrdersForCommercial(filterData, role, {limit: limit, offset: currentPage.current})
+        const res = await getOrdersForCommercial(filterData, role, {limit: limit.current, offset: currentPage.current})
         if (res.data !== null) {
             setTotal(res.data.total)
             setData(res.data.records)
@@ -57,7 +57,7 @@ const Order: NextPageWithLayout = () => {
         await getFilterData(filterData)
     }
     const changeSize = async (_: any, size: number) => {
-        setLimit(size)
+        limit.current = size
         await getFilterData(filterData)
     }
     const openModal = (record: OrderInfo, item: string) => {

@@ -11,11 +11,11 @@
     width: 100%;
     flex: 1;
     padding: 0 10px;
-    margin-bottom: 12vh;
+    margin-bottom: 9vh;
     overflow: auto;
 }
 .pagination_container {
-    height: 12%;
+    height: 10%;
     position: absolute;
     bottom: 0;
     width: 100%;

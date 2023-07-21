@@ -22,12 +22,12 @@ import {selectRole} from "@/features/user/userSlice";
 
 const preData = {
     orderId: '',
-    customerDept: '',
+    customerDept: [],
     expectedTimeBegin: '',
     expectedTimeEnd: '',
     orderDateBegin: '',
     orderDateEnd: '',
-    status: 'Production Confirmed'
+    status: ['Production Confirmed']
 }
 //获取合并后的订单
 
@@ -124,7 +124,7 @@ export const ShipmentArea = () => {
                         title=""
                         okButtonProps={{style: {display: 'none'}}}
                         showCancel={false}
-                        description={<OrderFilter type={'employee'} getFilterData={getFilterData} status={'waiting for production'}
+                        description={<OrderFilter type={'employee'} getFilterData={getFilterData} status={'Production Notify Shipment'}
                                                   combine={false}/>}
                     >
                         <Button style={{width: '100px'}}>Filter</Button>

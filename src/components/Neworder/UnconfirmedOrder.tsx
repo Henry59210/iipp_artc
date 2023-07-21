@@ -25,13 +25,13 @@ export const UnconfirmedOrder = ({type}:{type: 'order' | 'forecast'}) => {
     const [orderList, setOrderList] = useState<Array<OrderInfo>>([])
     const [loading, setLoading] = useState(false)
     const newOrderRequest:OrderRequest = {
-        customerDept: "",
+        customerDept: [],
         expectedTimeBegin: "",
         expectedTimeEnd: "",
         orderDateBegin: "",
         orderDateEnd: "",
         orderId: "",
-        status: "New Order"
+        status: ["New Order"]
     }
     const getOrdersList = async () => {
         setLoading(true)

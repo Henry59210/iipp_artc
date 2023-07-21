@@ -4,12 +4,12 @@ import {OrderStatus} from "@/components/Global/statusList";
 
 export type OrderRequest = {
     orderId: string,
-    customerDept: string,
+    customerDept: string[],
     expectedTimeBegin: string,
     expectedTimeEnd: string,
     orderDateBegin: string,
     orderDateEnd: string,
-    status: string
+    status: string[]
 }
 
 export type OrderResponse = {

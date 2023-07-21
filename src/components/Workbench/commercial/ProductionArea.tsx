@@ -18,12 +18,12 @@ import {selectRole} from "@/features/user/userSlice";
 
 const preData = {
     orderId: '',
-    customerDept: '',
+    customerDept: [],
     expectedTimeBegin: '',
     expectedTimeEnd: '',
     orderDateBegin: '',
     orderDateEnd: '',
-    status: 'Pending Notify Prod'
+    status: ['Pending Notify Prod']
 }
 //获取合并后的订单
 export const ProductionArea = () => {

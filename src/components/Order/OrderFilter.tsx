@@ -9,10 +9,10 @@ import {orderStatus} from "@/components/Global/statusList";
 
 export type Filter = {
     orderId: string,
-    customerDept: string,
+    customerDept: string[],
     expectedDate: Dayjs[],
     orderDate: Dayjs[],
-    status: string
+    status: string[]
 }
 
 export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterData: (obj: OrderRequest) => void, status?: string, combine: boolean }) => {
@@ -38,14 +38,15 @@ export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterDat
         }
     }
     const onFinish = (values?: Filter) => {
+        console.log(values)
         const initialObj: OrderRequest = {
             orderId: '',
-            customerDept: '',
+            customerDept: [],
             expectedTimeBegin: '',
             expectedTimeEnd: '',
             orderDateBegin: '',
             orderDateEnd: '',
-            status: props.status ? props.status : ''
+            status: props.status ? [props.status] : []
         }
         if (!values) return props.getFilterData(initialObj)
 
@@ -54,12 +55,12 @@ export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterDat
         const [orderDateBegin, orderDateEnd] = orderDate ? orderDate.map(item => item.format('YYYY-MM-DDT00:00:00')) : ['', '']
         const obj: OrderRequest = {
             orderId: orderId ? orderId : '',
-            customerDept: customerDept ? customerDept : '',
+            customerDept: customerDept ? customerDept : [],
             expectedTimeBegin,
             expectedTimeEnd,
             orderDateBegin,
             orderDateEnd,
-            status: props.status ? props.status : status ? status : ''
+            status: props.status ? [props.status] : status ? status : []
         }
         props.getFilterData(obj)
     };

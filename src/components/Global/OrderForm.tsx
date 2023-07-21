@@ -40,7 +40,7 @@ const reference: { [key: string]: ColumnType<CombineProductItem | OrderInfo> } =
         render: (_, record) =>
             (
                 <div>
-                    {dateConvert((record as OrderInfo).expectedTime, ['YYYY','-','MM', '-', 'DD'])}
+                    {dateConvert((record as OrderInfo).orderDate, ['YYYY','-','MM', '-', 'DD'])}
                 </div>
             )
     },
