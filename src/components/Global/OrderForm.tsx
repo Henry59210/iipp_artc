@@ -137,7 +137,7 @@ export const OrderForm = ({expectColumn, data, checkbox, combine, selectedAction
                 render: (_, record) =>
                     (
                         <div>
-                            {dateConvert((record as OrderInfo).expectedTime, ['YYYY','-','MM', '-', 'DD'])}
+                            {dateConvert((record as OrderInfo).orderDate, ['YYYY','-','MM', '-', 'DD'])}
                         </div>
                     )
             },
