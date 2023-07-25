@@ -178,6 +178,7 @@ export function rollbackProductionOrder(param: string) {
         method: 'DELETE',
     })
 }
+//还没确认的订单
 export function getProductionCombineOrder(param: { limit?: number, offset?: number }) {
     return request<CombineOrderResponse<CombineProductItem>>({
         url: '/commercial/production/page',
@@ -193,7 +194,7 @@ export function getProductionCombineDetail(combineId: string, role: string) {
         method: 'GET',
     })
 }
-
+//还没确认的订单
 export function getShipCombineOrder(param: { limit?: number, offset?: number }) {
     return request<CombineOrderResponse<CombineShipItem>>({
         url: '/commercial/ship/page',
@@ -216,6 +217,7 @@ export function packageShipOrder(data: string[]) {
     })
 }
 //For production
+//已经确认的订单
 export function getProductionOrder(data:{id?: string, isFinished?: boolean}, param: { limit?: number, offset?: number }) {
     return request<CombineOrderResponse<CombineProductItem>>({
         url: '/production/production/page',
@@ -242,6 +244,16 @@ export function finishOrder(data:Array<string>) {
     return request<string>({
         url: '/production/production',
         method: 'PUT',
+        data
+    })
+}
+//For Shipment
+//已经确认的订单
+export function getShipmentOrder( data: { isShipped: boolean }, param: { limit?: number, offset?: number }) {
+    return request<CombineOrderResponse<CombineShipItem>>({
+        url: '/shipment/ship/page',
+        method: 'POST',
+        param,
         data
     })
 }

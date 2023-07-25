@@ -2,7 +2,14 @@ import React, {ReactElement, ReactNode, useEffect, useState} from "react";
 import type {MenuProps} from 'antd';
 import {Avatar, Badge, Button, ConfigProvider, Drawer, Menu} from 'antd';
 import {useRouter} from "next/router";
-import {loginAsync, logoutAsync, selectRole, selectUrlForm, selectUsername} from "@/features/user/userSlice";
+import {
+    loginAsync,
+    logoutAsync,
+    selectRole,
+    selectUrlForm,
+    selectUserId,
+    selectUsername
+} from "@/features/user/userSlice";
 import {useAppDispatch, useAppSelector} from "@/hooks";
 import styles from "./styles.module.css"
 import Image from 'next/image'
@@ -12,16 +19,35 @@ import {
 } from '@ant-design/icons';
 import {NoticeBar} from "@/components/Layout/NoticeBar";
 import {reset} from "@/features/pageMemo/pageSlice";
+import {noticeBarInfo, NotificationType} from "@/apis/socketApis";
+import {getToken} from "@/network/auth";
 
 
 const NavBar = () => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
-    const urlForm = useAppSelector(selectUrlForm)
     const [current, setCurrent] = useState('dashboard')
+    const urlForm = useAppSelector(selectUrlForm)
+    const [notificationArr, setNotificationArr] = useState<Array<NotificationType>>([])
+    const role = useAppSelector(selectRole)
+    const userId = useAppSelector(selectUserId)
+    const token = getToken()
+
+    const closeCallBack = (data:any) => {
+        setNotificationArr(data)
+    }
+
     useEffect(()=>{
         setCurrent(Object.entries(urlForm).find(([key, value]) => value === router.asPath)?.[0] !)
     }, [urlForm])
+
+    useEffect(()=>{
+        if(role !== '' && userId !== '' &&  token!== '') {
+            const noticeBarSocket = noticeBarInfo(role, token, userId)
+            noticeBarSocket.initWebSocket(closeCallBack)
+        }
+    },[role, userId, token])
+
     const items: MenuProps['items'] = []
 
     const showDrawer = () => {
@@ -54,14 +80,15 @@ const NavBar = () => {
                 <Menu className={styles.navbar_item__menu} style={{minWidth: 500}} onClick={onClick}
                       selectedKeys={[current]} mode="horizontal" items={items}></Menu>
                 <div className={styles.navbar_item__userinfo}>
-                    <UserBar showNoticeBar={showDrawer}/>
+                    <UserBar showNoticeBar={showDrawer} count={notificationArr.length}/>
                 </div>
             </div>
             <Drawer title="Information"
                     width={320}
+                    destroyOnClose={false}
                     headerStyle={{'background': 'var(--back-color_navbar)', 'color': 'white'}}
                     bodyStyle={{'padding': '0'}} placement="right" onClose={onClose} open={open}>
-                <NoticeBar/>
+                <NoticeBar infoArr={notificationArr}/>
             </Drawer>
         </>
 
@@ -70,7 +97,7 @@ const NavBar = () => {
 
 export default NavBar;
 
-const UserBar = (props: {showNoticeBar: any}) => {
+const UserBar = (props: {showNoticeBar: any, count: number}) => {
     const role = useAppSelector(selectRole)
     const userName = useAppSelector(selectUsername)
     const dispatch = useAppDispatch()
@@ -81,7 +108,7 @@ const UserBar = (props: {showNoticeBar: any}) => {
     return (
         <div className={styles.userbar}>
             <div className={styles.userbar_notification}>
-                <Badge count={99}>
+                <Badge count={props.count}>
                     <BellFilled className={styles.userbar_notification__icon} onClick={props.showNoticeBar}/>
                 </Badge>
             </div>

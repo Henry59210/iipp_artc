@@ -58,7 +58,6 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
     }, [])
     const onClick: MenuProps['onClick'] = (e) => {
         setCurrent(e.key);
-        console.log(current)
     };
 
     const getOrderDetail = (record: any) => {

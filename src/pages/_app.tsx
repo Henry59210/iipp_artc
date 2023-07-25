@@ -17,7 +17,6 @@ type AppPropsWithLayout = AppProps & {
 
 export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
     const getLayout = Component.getLayout || ((page) => page)
-    const [a, setA] = useState(false)
 
     return (
         <Provider store={store}>

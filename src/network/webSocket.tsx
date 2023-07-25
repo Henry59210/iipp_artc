@@ -7,7 +7,7 @@ export type WebSocketAPIMethods = {
     getSock: Function,
     connectStatus:Function
 }
-export function websocketAPI(websocketUrl:string):WebSocketAPIMethods {
+export function websocketAPI(websocketUrl: string, token?: string):WebSocketAPIMethods {
     let webSocket:any = null;
     let isConnect:boolean = false; //连接状态
     let globalCallback: (e:any) => void//定义外部接收数据的回调函数
@@ -20,7 +20,7 @@ export function websocketAPI(websocketUrl:string):WebSocketAPIMethods {
     const baseURL = 'ws://18.136.211.216/api/v2';
     const heartCheck: HeartCheck = {
         heartbeatData: 'heartbeat package',
-        timeout: 60 * 1000, //每段时间发送一次心跳包 这里设置为60s
+        timeout: 30 * 1000, //每段时间发送一次心跳包 这里设置为60s
         heartbeat: null, //延时发送消息对象（启动心跳新建这个对象，收到消息后重置对象）
         start: function () {
             this.heartbeat = setInterval(() => {
@@ -45,7 +45,7 @@ export function websocketAPI(websocketUrl:string):WebSocketAPIMethods {
     }
 //初始化websocket
     function initWebSocket(callback: any) {
-        let url = baseURL + websocketUrl + '?token=hzxisgod'
+        let url = baseURL + websocketUrl + `?token=${token ? token : 'hzxisgod'}`
         currentTarget = websocketUrl
         currentCb = callback
         //此callback为在其他地方调用时定义的接收socket数据的函数

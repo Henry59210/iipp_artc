@@ -90,7 +90,7 @@ export const {resetToken} = userSlice.actions
 export const selectToken = (state: AppState) => state.user.token
 export const selectRole = (state: AppState) => state.user.role
 export const selectUsername = (state: AppState) => state.user.username
-export const selectUserid = (state: AppState) => state.user.userId
+export const selectUserId = (state: AppState) => state.user.userId
 export const selectUrlForm = (state: AppState) => state.user.urlForm
 export const selectHasUserInfo = (state: AppState) => state.user.hasUserInfo
 

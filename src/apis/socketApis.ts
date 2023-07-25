@@ -22,11 +22,28 @@ export type ProductInventory = {
     quantity: number
 }
 
+export type NotificationType = {
+    content: string
+    createTime: string
+    createUser: string
+    id: string
+    orderId: string
+    readFlag: boolean
+    receiverRole:string
+    senderRole:string
+    updateTime: string
+    updateUser: string
+}
+
 export function realTimeMaterialInventory() {
     return websocketAPI('/basic/ws/material/0')
 }
 
 export function realTimeProductInventory() {
     return websocketAPI('/basic/ws/product/0')
+}
 
+export function noticeBarInfo(role: string, token: string | undefined, userId: string) {
+    console.log(arguments)
+    return websocketAPI(`/${role}/ws/${userId}`, token)
 }

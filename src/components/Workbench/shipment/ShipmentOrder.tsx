@@ -1,25 +1,25 @@
+import {message, Modal, Spin} from "antd";
 import styles from "@/components/Workbench/production/styles.module.css";
 import {OrderForm} from "@/components/Global/OrderForm";
-import {Button, message, Modal, Spin} from "antd";
 import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
-import React, {useEffect, useRef, useState} from "react";
-import {useAppSelector} from "@/hooks";
-import {selectRole} from "@/features/user/userSlice";
-import {
-    CombineProductItem, finishOrder,
-    getProductionCombineOrder,
-    getProductionOrder, modifyMaterialInventory,
-    OrderInfo,
-    rollbackProductionOrder
-} from "@/apis/order";
 import {UpdateMaterial} from "@/components/Workbench/production/UpdateMaterial";
+import React, {useEffect, useRef, useState} from "react";
+import {
+    CombineProductItem, CombineShipItem,
+    finishOrder,
+    getProductionOrder,
+    getShipmentOrder,
+    modifyMaterialInventory
+} from "@/apis/order";
+import {ShipOrderForm} from "@/components/Order/ShipOrderForm";
+import {UpdateShipInfo} from "@/components/Workbench/shipment/UpdateShipInfo";
 
 const reference = {pending: false, fulfilled: true}
 
-export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
+export const ShipmentOrder = ({type}: { type: 'pending' | 'fulfilled'}) => {
     const timer = useRef<NodeJS.Timeout | null>(null)
     const [loading, setLoading] = useState(false)
-    const [combinedData, setCombinedData] = useState<CombineProductItem[]>([])
+    const [combinedData, setCombinedData] = useState<CombineShipItem[]>([])
     const [detailOpen, setDetailOpen] = useState(false);
     const [updateOpen, setUpdateOpen] = useState(false);
     const currentId = useRef('')
@@ -38,13 +38,12 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
 
     const getCombinedData = async () => {
         setLoading(true)
-        const res = await getProductionOrder({isFinished: reference[type]}, {limit: -1, offset: 1})
+        const res = await getShipmentOrder( {isShipped: reference[type]},{limit: -1, offset: 1})
         if (res.data !== null) {
             setCombinedData(res.data.records)
             setLoading(false)
         }
     }
-    //pending和fulfilled可以通用
     const pendingOrderOption = async ({id}: { id: string }, item: 'Update' | 'Detail') => {
         currentId.current = id
         if (item === 'Detail') {
@@ -91,14 +90,12 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
         }
     }
     return (
-        <Spin spinning={loading} >
+        <Spin spinning={loading}>
             <div className={styles.pending_container}>
-                <OrderForm data={combinedData} checkbox={false} combine={true}
-                           node={type === 'pending' ? ['Detail', 'Update'] : ['Detail']}
-                           action={pendingOrderOption}/>
+                <ShipOrderForm data={combinedData} action={pendingOrderOption} expectColumn={ reference[type] ? ['carPlate', 'leavingTime'] : [] }/>
             </div>
             <Modal
-                title="Production Order Details"
+                title="Shipment Order Details"
                 centered
                 destroyOnClose={true}
                 open={detailOpen}
@@ -106,19 +103,19 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
                 onCancel={() => setDetailOpen(false)}
                 width={1200}
             >
-                <CombineOrderDetails id={currentId.current} type={'production'}/>
+                <CombineOrderDetails id={currentId.current} type={'shipment'}/>
             </Modal>
             <Modal
-                title="Update actual usage of material"
+                title="Update Shipment Information"
                 centered
                 destroyOnClose={true}
                 open={updateOpen}
                 okText={'confirm'}
-                onOk={updateMaterialUsage}
+                onOk={()=>setUpdateOpen(false)}
                 onCancel={() => setUpdateOpen(false)}
                 width={1000}
             >
-                <UpdateMaterial id={currentId.current} getLatestArray={getLatestArray} getLength={getLength}/>
+                <UpdateShipInfo id={currentId.current}/>
             </Modal>
         </Spin>
     )
