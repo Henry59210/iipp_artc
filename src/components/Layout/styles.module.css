@@ -16,9 +16,11 @@
     background: var(--back-color_navbar);
     color: white;
 }
+
 .drawer {
     padding: 0;
 }
+
 .navbar_item__menu {
     line-height: 80px;
     font-size: 20px;
@@ -58,13 +60,15 @@
     background: var(--back-color_container);
     box-sizing: border-box;
     padding: 10px 20px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .messagebox_init {
-    opacity: 0;
+    visibility: hidden;
+    position: relative;
     top: 100vh;
-    transition-property: opacity, top;
+    transition-property: visibility, top;
     transition-duration: 1s;
 }
 
@@ -78,8 +82,26 @@
     border-radius: 10px;
     padding: 10px 10px 0 10px;
     top: 0;
-    opacity: 1;
+    visibility: visible;
     color: #303133;
+    left: 0;
+    transition-property: left;
+    transition-duration: 1s;
+}
+.messagebox_leave {
+    position: relative;
+    font-weight: bold;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    background: white;
+    border: 1px solid #DCDFE6;
+    border-radius: 10px;
+    padding: 10px 10px 0 10px;
+    top: 0;
+    left: 350px;
+    visibility: visible;
+    color: #303133;
+
 }
 
 .messagebox_info {

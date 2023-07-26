@@ -44,6 +44,5 @@ export function realTimeProductInventory() {
 }
 
 export function noticeBarInfo(role: string, token: string | undefined, userId: string) {
-    console.log(arguments)
     return websocketAPI(`/${role}/ws/${userId}`, token)
 }

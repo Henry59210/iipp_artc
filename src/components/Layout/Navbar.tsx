@@ -21,6 +21,7 @@ import {NoticeBar} from "@/components/Layout/NoticeBar";
 import {reset} from "@/features/pageMemo/pageSlice";
 import {noticeBarInfo, NotificationType} from "@/apis/socketApis";
 import {getToken} from "@/network/auth";
+import {dispatch} from "jest-circus/build/state";
 
 
 const NavBar = () => {
@@ -45,6 +46,7 @@ const NavBar = () => {
         if(role !== '' && userId !== '' &&  token!== '') {
             const noticeBarSocket = noticeBarInfo(role, token, userId)
             noticeBarSocket.initWebSocket(closeCallBack)
+
         }
     },[role, userId, token])
 
@@ -63,6 +65,7 @@ const NavBar = () => {
             key: i
         })
     }
+
     const onClick: MenuProps['onClick'] = (e) => {
         router.push(urlForm[e.key])
         setCurrent(e.key)
@@ -85,7 +88,7 @@ const NavBar = () => {
             </div>
             <Drawer title="Information"
                     width={320}
-                    destroyOnClose={false}
+                    destroyOnClose={true}
                     headerStyle={{'background': 'var(--back-color_navbar)', 'color': 'white'}}
                     bodyStyle={{'padding': '0'}} placement="right" onClose={onClose} open={open}>
                 <NoticeBar infoArr={notificationArr}/>

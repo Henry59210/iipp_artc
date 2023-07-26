@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import counterReducer from './features/counter/counterSlice'
 import userReducer from './features/user/userSlice'
 import pageReducer from "@/features/pageMemo/pageSlice";
+import notificationReducer from "@/features/notification/notificationSlice";
 
 
 export function makeStore() {
@@ -9,7 +10,8 @@ export function makeStore() {
     reducer: {
         counter: counterReducer,
         user: userReducer,
-        page: pageReducer
+        page: pageReducer,
+        notification: notificationReducer
     },
   })
 }
