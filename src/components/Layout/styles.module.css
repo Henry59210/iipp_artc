@@ -64,12 +64,46 @@
     overflow-x: hidden;
 }
 
-.messagebox_init {
-    visibility: hidden;
-    position: relative;
-    top: 100vh;
-    transition-property: visibility, top;
-    transition-duration: 1s;
+@keyframes down2top {
+    from {
+        top: 100vh
+    }
+    to {
+        top: 0
+    }
+}
+
+@keyframes cur2top {
+    from {
+        top: 0
+    }
+    to {
+        top: -105px
+    }
+}
+
+@keyframes remove {
+    from {
+        left: 0
+    }
+    to {
+        left: 360px;
+        visibility: hidden;
+    }
+}
+
+.messagebox_down_top {
+    animation: down2top 1s;
+}
+
+.messagebox_cur_top {
+    animation: cur2top 1s;
+    animation-fill-mode: forwards;
+}
+
+.remove {
+    animation: remove 1s;
+    animation-fill-mode: forwards;
 }
 
 .messagebox {
@@ -82,26 +116,8 @@
     border-radius: 10px;
     padding: 10px 10px 0 10px;
     top: 0;
-    visibility: visible;
     color: #303133;
     left: 0;
-    transition-property: left;
-    transition-duration: 1s;
-}
-.messagebox_leave {
-    position: relative;
-    font-weight: bold;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-    background: white;
-    border: 1px solid #DCDFE6;
-    border-radius: 10px;
-    padding: 10px 10px 0 10px;
-    top: 0;
-    left: 350px;
-    visibility: visible;
-    color: #303133;
-
 }
 
 .messagebox_info {

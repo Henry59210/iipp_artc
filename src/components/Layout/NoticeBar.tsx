@@ -1,27 +1,78 @@
-import React, {ReactElement, useEffect, useRef, useState} from "react";
+import React, {ForwardedRef, forwardRef, ReactElement, useEffect, useRef, useState} from "react";
 import styles from "./styles.module.css"
 import {Button, message, Radio} from "antd";
 import {noticeBarInfo, NotificationType} from "@/apis/socketApis";
 import {useAppDispatch, useAppSelector} from "@/hooks";
-import {selectReadList, setRead} from "@/features/notification/notificationSlice";
+import {removeHandled, selectReadList, setRead} from "@/features/notification/notificationSlice";
 import {selectRole} from "@/features/user/userSlice";
+import {readMessage} from "@/apis/notification";
 
 export const NoticeBar = ({infoArr}: { infoArr: Array<NotificationType> }) => {
-    const [isReadList, setIsReadList] = useState<{ readInfo: NotificationType[], unreadInfo: NotificationType[] }>({
-        readInfo: [],
-        unreadInfo: []
-    })
+    const [removeIndex, setRemoveIndex] = useState(-1)
+    const [removeId, setRemoveId] = useState('')
+    const [lastRemoveId, setLastRemoveId] = useState('')
+    const [doesSthRemoved, setDoesSthRemoved] = useState(false)
     const role = useAppSelector(selectRole)
     const readList: { [key: string]: boolean } = useAppSelector(selectReadList)
+    const msgBoxesRef = useRef<HTMLDivElement[]>([])
+    const lastHeight = useRef(0)
+    const lastNumber = useRef(-1)
+    const [blockHeight, setBlockHeight] = useState(0)
     const dispatch = useAppDispatch()
 
+    const getLastRef = () => {
+        if(msgBoxesRef.current.length === 1 && msgBoxesRef.current[0] === null) return null
+        for(let i = msgBoxesRef.current.length-1; i >= 0; i--) {
+            if(msgBoxesRef.current[i] !== null) return msgBoxesRef.current[i]
+        }
+        return null
+    }
+    //return 的函数没有括号
     useEffect(() => {
-        generateReadList()
+        const lastRef = getLastRef()
+        if(lastRef !== null) {
+            const handleAnimationEnd = () => {
+                lastHeight.current = lastRef ? lastRef.offsetTop + 120 : 0
+                console.log(msgBoxesRef)
+                setBlockHeight(lastHeight.current)
+                lastRef.removeEventListener('animationend', handleAnimationEnd)
+            };
+            if (lastRef.className.search('down_top') !== -1)
+                lastRef.addEventListener('animationend', handleAnimationEnd);
+            else handleAnimationEnd()
+            return setListRead
+        }
+    }, [])
+
+    useEffect(() => {
+        setDoesSthRemoved(false)
+        if(lastNumber.current < infoArr.length && lastNumber.current !== -1) {
+            const lastRef = getLastRef()
+            if(lastRef !== null) {
+                const handleAnimationEnd = () => {
+                    lastHeight.current = lastRef ? lastRef.offsetTop + 120  : 0
+                    console.log(msgBoxesRef)
+                    setBlockHeight(lastHeight.current )
+                    lastRef.removeEventListener('animationend', handleAnimationEnd)
+                };
+                if(lastRef.className.search('down_top') !== -1)
+                    lastRef.addEventListener('animationend', handleAnimationEnd);
+                else  handleAnimationEnd()
+            }
+        }
+        return ()=>{lastNumber.current = infoArr.length}
     }, [infoArr.length])
 
     useEffect(() => {
-        return setListRead()
-    }, [])
+        if (removeId !== '') {
+            (function (removeId: string) {
+                setTimeout(async () => {
+                    await readMessage([removeId], role)
+                }, 800)
+            })(removeId)
+            setDoesSthRemoved(true)
+        }
+    }, [removeId])
 
 
     const setListRead = () => {
@@ -30,80 +81,78 @@ export const NoticeBar = ({infoArr}: { infoArr: Array<NotificationType> }) => {
         })
     }
 
-    const generateReadList = () => {
-        const readInfo: NotificationType[] = []
-        const unreadInfo: NotificationType[] = []
-        infoArr.forEach(item => {
-            readList[item.id] ? readInfo.push(item) : unreadInfo.push(item)
-        })
-        setIsReadList({
-            readInfo,
-            unreadInfo
-        })
-        return {
-            readInfo,
-            unreadInfo
+    const generateClassName = (id: string, currentIndex: number, removeIndex: number, isRemove: boolean) => {
+        if (isRemove) {
+            if (currentIndex === removeIndex) {
+                return `${styles.messagebox} ${styles.remove}`
+            } else if (currentIndex > removeIndex) {
+                return `${styles.messagebox} ${styles.messagebox_cur_top}`
+            } else return `${styles.messagebox}`
+        } else {
+            if (readList[id]) {
+                return `${styles.messagebox}`
+            } else {
+                return `${styles.messagebox} ${styles.messagebox_down_top}`
+            }
         }
     }
 
-    const messageBoxAction = (from: string, receive: string, item: string) => {
-        if (item === 'OK') {
-            setRemove(true)
-        } else if (item === 'Handle') {
-
-        }
+    const getRemoveIndex = (index: number, id: string) => {
+        setListRead()
+        setRemoveIndex(index)
+        setRemoveId(id)
+        dispatch(removeHandled(id))
     }
 
     return (
         <div className={styles.noticebar}>
             <div className={styles.noticebar_inline}>
-                {isReadList.readInfo.map(item => <MessageBox key={item.id} isNew={false} from={item.senderRole}
-                                                             receive={item.receiverRole}/>)}
-                {isReadList.unreadInfo.map(item => <MessageBox key={item.id} isNew={true} from={item.senderRole}
-                                                               receive={item.receiverRole}/>)}
+                <div style={{height:  blockHeight }}>
+                    {infoArr.map((item, index) =>
+                        <MessageBox ref={el => msgBoxesRef.current[index] = el} key={item.id} currentIndex={index} setClassName={generateClassName} id={item.id}
+                                    remove={getRemoveIndex} removeIndex={removeIndex}
+                                    doesSthRemoved={doesSthRemoved}/>)}
+                </div>
             </div>
         </div>
     )
 }
 
-const MessageBox = ({isNew, from, receive, className, messageBoxAction}: { isNew?: Boolean, from: string, receive: string, className: string, messageBoxAction: Function}) => {
-    const [display, setDisplay] = useState(false);
-    const [remove, setRemove] = useState(false)
+
+const MessageBox = forwardRef(({
+                        setClassName,
+                        id,
+                        currentIndex,
+                        doesSthRemoved,
+                        removeIndex,
+                        remove,
+                    }: {
+    ref:number, id: string, currentIndex: number, remove: Function, removeIndex: number, doesSthRemoved: boolean,
+    setClassName: (id: string, currentIndex: number, removeIndex: number, isRemove: boolean) => string
+}, ref: ForwardedRef<any>) => {
     const [isOkButton, setIsOkButton] = useState(true)
     const [isHandleButton, setIsHandleButton] = useState(true)
-    useEffect(() => {
-        setDisplay(true)
-    }, [])
 
-    useEffect(() => {
-        if (from === 'shipment' && receive === 'commercial') {
-            setIsHandleButton(false)
-        }
-        if (from === 'commercial' && (receive === 'Production' || receive === 'Shipment')) {
-            setIsOkButton(false)
-        }
-    })
+    const messageBoxAction = async (item: string) => {
 
-    const generateClassName = ()=>{
-        if(isNew) {
-            if(display) {
-                if(remove) {
-                    return `${styles.messagebox} ${styles.messagebox_leave}`
-                }
-                return `${styles.messagebox_init} ${styles.messagebox}`
-            } else return `${styles.messagebox_init}`
-        } else return `${styles.messagebox}`
+        if (item === 'OK') {
+
+            // await readMessage([id], role)
+        } else if (item === 'Handle') {
+
+        }
+        remove(currentIndex, id)
     }
     return (
-        <div
-            className={className}>
-            <div className={styles.messagebox_info}>From: {from}</div>
-            <div className={styles.messagebox_info}>Type: new order</div>
+        <div ref={ref}
+             className={setClassName(id, currentIndex, removeIndex, doesSthRemoved)}>
+            <div className={styles.messagebox_info}>From: {id}</div>
+            <div className={styles.messagebox_info}>Type: {currentIndex}</div>
             <div className={styles.messagebox_operate}
-                 onClick={(e) => messageBoxAction(from, receive, (e.target as HTMLElement).innerHTML)}>
+                 onClick={(e) => messageBoxAction((e.target as HTMLElement).innerHTML)}>
                 {isOkButton ? <Button type={"link"}>OK</Button> : null}
                 {isHandleButton ? <Button type={"link"}>Handle</Button> : null}
             </div>
         </div>
     )
-}
+})

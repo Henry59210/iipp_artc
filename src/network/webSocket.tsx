@@ -19,7 +19,7 @@ export function websocketAPI(websocketUrl: string, token?: string):WebSocketAPIM
 //心跳设置
     const baseURL = 'ws://18.136.211.216/api/v2';
     const heartCheck: HeartCheck = {
-        heartbeatData: 'heartbeat package',
+        heartbeatData: 'Ping',
         timeout: 30 * 1000, //每段时间发送一次心跳包 这里设置为60s
         heartbeat: null, //延时发送消息对象（启动心跳新建这个对象，收到消息后重置对象）
         start: function () {

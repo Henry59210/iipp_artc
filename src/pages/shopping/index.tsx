@@ -14,111 +14,6 @@ import {RangePickerProps} from "antd/es/date-picker";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 
-const testData: ProductInventoryInfo[] = [
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567891',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    },
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567892',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    },
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567893',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    },
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567894',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    },
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567895',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    },
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567896',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    },
-    {
-        createTime: 'string',
-        createUser: 'string',
-        id: '1234567897',
-        productName: 'MIX CHOC DRINK KR 560G 16/CS',
-        productTypeId: '11111111',
-        quantity: 300,
-        unreservedQuantity: 200,
-        updateTime: 'string',
-        updateUser: 'string',
-    }
-]
-const cartData: ProductInfo[] = [
-    {
-        id: '',
-        productName: '',
-        quantity: 20
-    }, {
-        id: '',
-        productName: '',
-        quantity: 20
-    }, {
-        id: '',
-        productName: '',
-        quantity: 20
-    }, {
-        id: '',
-        productName: '',
-        quantity: 20
-    }, {
-        id: '',
-        productName: '',
-        quantity: 20
-    },
-]
-const CheckboxGroup = Checkbox.Group;
-
-
 const shoppingCartHint = 'Shopping Cart: '
 const productListHint = 'Products:'
 const {RangePicker} = DatePicker;
@@ -167,7 +62,6 @@ const Shopping: NextPageWithLayout = () => {
         const res = await getCartList()
         if (res.data !== null) {
             setCartList(res.data)
-            console.log('aaa')
             res.data.forEach(item => {
                 cartListCache.current[item.id] = item.quantity
             })
@@ -246,8 +140,12 @@ const Shopping: NextPageWithLayout = () => {
         await getCartListInfo()
     }
     const submitCartList = () => {
-        expectedDate.current = ''
-        setIsModalOpen(true);
+        if(cartList.length) {
+            expectedDate.current = ''
+            setIsModalOpen(true);
+        } else {
+            message.warning('Please add something')
+        }
     }
     const placeOrder = async () => {
         const obj = {
@@ -257,6 +155,7 @@ const Shopping: NextPageWithLayout = () => {
         await submitOrder(obj)
         await updateList()
         setIsModalOpen(false);
+        setHasExpectedDate(false);
     };
 
     const handleCancel = () => {
