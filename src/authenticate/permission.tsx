@@ -1,5 +1,5 @@
 import {getToken} from "../network/auth";
-import {getInfoAsync, selectHasUserInfo, selectRole} from "@/features/user/userSlice";
+import {getInfoAsync, selectHasUserInfo, selectRole, selectUserId} from "@/features/user/userSlice";
 import {useAppDispatch, useAppSelector} from "@/hooks";
 import {useRouter} from "next/router";
 import {ReactNode, useEffect, useState} from "react";
@@ -10,11 +10,11 @@ import {chooseForm} from "./urlForm";
 
 const whiteList = ['/login']
 export const Permission = ({children}:{children:ReactNode})=>{
-    const hasToken = getToken();
     const dispatch = useAppDispatch()
     const router = useRouter()
     const hasUserInfo = useAppSelector(selectHasUserInfo)
     const role = useAppSelector(selectRole)
+    const hasToken = getToken();
     const [authorized, setAuthorized] = useState(false)
 
     useEffect(() => {
@@ -61,7 +61,7 @@ export const Permission = ({children}:{children:ReactNode})=>{
             router.events.off('routeChangeStart', preventAccess);
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [hasToken, router, dispatch]);
+    }, [hasToken]);
 
     return authorized ? <>{children}</> : <Loading/>;
 }

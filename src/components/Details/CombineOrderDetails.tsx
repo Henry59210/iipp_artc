@@ -81,8 +81,8 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
             return combineDetailData.productRequiredList.map(item => {
                 if (!item.materialRequiredList) return <div>empty</div>
 
-                return (<div style={{display: 'flex', alignItems: 'center'}}>
-                    <ItemText key={item.productId}
+                return (<div key={item.productId} style={{display: 'flex', alignItems: 'center'}}>
+                    <ItemText
                               title={item.productName}
                               value={item.quantity}/>
                     <div style={{marginBottom: 15, marginLeft: 15}}>

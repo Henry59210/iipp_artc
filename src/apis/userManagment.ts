@@ -13,7 +13,7 @@ export interface UserInfo {
 }
 
 export function login(data: LoginForm){
-    return request<string>({ //string指返回的data中是string
+    return request<{ token: string, userId: string }>({ //string指返回的data中是string
         url: '/auth/login',
         method: 'POST',
         data

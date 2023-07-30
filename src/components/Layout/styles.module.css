@@ -121,7 +121,8 @@
 }
 
 .messagebox_info {
-    text-align: center;
+    text-align: left;
+    line-height: 25px;
 }
 
 .messagebox_operate {

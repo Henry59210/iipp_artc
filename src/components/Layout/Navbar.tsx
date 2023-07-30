@@ -37,7 +37,6 @@ const NavBar = () => {
     const closeCallBack = (data:any) => {
         setNotificationArr(data)
     }
-
     useEffect(()=>{
         setCurrent(Object.entries(urlForm).find(([key, value]) => value === router.asPath)?.[0] !)
     }, [urlForm])
@@ -46,7 +45,6 @@ const NavBar = () => {
         if(role !== '' && userId !== '' &&  token!== '') {
             const noticeBarSocket = noticeBarInfo(role, token, userId)
             noticeBarSocket.initWebSocket(closeCallBack)
-
         }
     },[role, userId, token])
 
@@ -90,7 +88,12 @@ const NavBar = () => {
                     width={320}
                     destroyOnClose={true}
                     headerStyle={{'background': 'var(--back-color_navbar)', 'color': 'white'}}
-                    bodyStyle={{'padding': '0'}} placement="right" onClose={onClose} open={open}>
+                    bodyStyle={{'padding': '0'}} placement="right" onClose={onClose} open={open}
+                    onClick={(e)=>{
+                        if((e.target as HTMLElement).innerHTML === 'Handle') {
+                            setOpen(false)
+                        }
+                    }}>
                 <NoticeBar infoArr={notificationArr}/>
             </Drawer>
         </>

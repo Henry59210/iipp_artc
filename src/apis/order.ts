@@ -226,6 +226,15 @@ export function getProductionOrder(data:{id?: string, isFinished?: boolean}, par
         param
     })
 }
+
+export function confirmProductionOrder(data:string[]) {
+    return request<string>({
+        url: '/production/production/confirm',
+        method: 'PUT',
+        data,
+    })
+}
+
 export function getExpectedOrderData(param: string) {
     return request<Omit<CombineProductOrderDetail, 'id'|'orderList'>>({
         url: '/production/production/' + param,
@@ -255,5 +264,13 @@ export function getShipmentOrder( data: { isShipped: boolean }, param: { limit?:
         method: 'POST',
         param,
         data
+    })
+}
+
+export function confirmShipmentOrder(data:string[]) {
+    return request<string>({
+        url: '/shipment/ship/confirm',
+        method: 'PUT',
+        data,
     })
 }

@@ -13,7 +13,7 @@ export interface UserState {
     hasUserInfo: boolean
 }
 
-const getDefaultState:()=>UserState =() => {
+const getDefaultState: () => UserState = () => {
     return {
         token: getToken(),
         role: '',
@@ -30,7 +30,7 @@ export const loginAsync = createAsyncThunk(
     'user/login',
     async (userInfo: LoginForm) => {
         const response = await login(userInfo)
-        return response.data ? response.data : 'token error'
+        return response.data
     }
 )
 
@@ -56,7 +56,7 @@ export const userSlice = createSlice({
     initialState,
     // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
-        resetToken: () => {
+        resetToken: (state) => {
             removeToken() // must remove  token  first
             getDefaultState()
         }
@@ -66,14 +66,14 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loginAsync.fulfilled, (state, action) => {
-                    state.token = action.payload
-                    setToken(<string>action.payload)
+                state.token = action.payload!.token
+                setToken(action.payload!.token)
             })
-            .addCase(getInfoAsync.fulfilled, (state, action) =>{
-                const { role, username, id, urlForm } = action.payload;
+            .addCase(getInfoAsync.fulfilled, (state, action) => {
+                const {role, username,id, urlForm} = action.payload;
                 state.role = role;
-                state.username = username;
                 state.userId = id;
+                state.username = username;
                 state.urlForm = urlForm;
                 state.hasUserInfo = true
             })
