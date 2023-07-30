@@ -45,8 +45,8 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'fulfilled'}) => {
             (async function () {
                 await getCombinedData()
             })()
-            dispatch(setUpdate(false))
         }
+        dispatch(setUpdate(false))
     }, [isUpdate])
 
     const getCombinedData = async () => {

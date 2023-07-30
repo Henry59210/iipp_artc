@@ -5,7 +5,7 @@ import {
     CombineProductOrderDetail, CombineShipOrderDetail,
     getProductionCombineDetail,
     getShipCombineOrderDetail,
-    productRequiredListItem
+    ProductRequiredListItem
 } from "@/apis/order";
 import {OrderForm} from "@/components/Global/OrderForm";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
@@ -65,13 +65,13 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
         setDetailOpen(true)
     }
 
-    const generateMaterialHint = (item: productRequiredListItem) => {
+    const generateMaterialHint = (productItem: ProductRequiredListItem) => {
         return (
             <div style={{margin: 20}}>
-                {item.materialRequiredList.map(item => <ItemText key={item.materialId}
+                {productItem.materialRequiredList.map(item => <ItemText key={item.materialId}
                                                                  title={item.materialName}
-                                                                 value={item.weight}
-                                                                 unit={'KG'}/>
+                                                                 value={item.weight*productItem.quantity}
+                                                                 unit={'KG'} perUnit={` ( ${item.weight}kg / per )`}/>
                 )}
             </div>
         )
@@ -81,7 +81,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
             return combineDetailData.productRequiredList.map(item => {
                 if (!item.materialRequiredList) return <div>empty</div>
 
-                return (<div key={item.productId} style={{display: 'flex', alignItems: 'center'}}>
+                return (<div key={item.productId} style={{display: 'flex'}}>
                     <ItemText
                               title={item.productName}
                               value={item.quantity}/>

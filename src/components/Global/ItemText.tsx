@@ -3,7 +3,7 @@ import React from "react";
 import {productFormatConvert} from "@/utilities/usefulTools";
 
 
-export const ItemText = (props: { title: string, value: string | number, unit?: 'PKG' | 'KG', bold?: boolean, actualUse?: number }) => {
+export const ItemText = (props: { title: string, value: string | number, unit?: 'PKG' | 'KG', perUnit?: string, bold?: boolean, actualUse?: number }) => {
     let unit
     if (props.unit === 'KG') {
         unit = 'KG'
@@ -18,7 +18,7 @@ export const ItemText = (props: { title: string, value: string | number, unit?: 
             <div className={styles.value}>
                 {props.actualUse !== undefined ?
                     <span className={styles.value_span}>{props.actualUse === null ? '-' : props.actualUse}</span> : ''}
-                {props.value + ' ' + unit}
+                {props.value + ' ' + unit + (props.perUnit ? props.perUnit : '')}
             </div>
         </div>
     )

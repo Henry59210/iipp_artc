@@ -80,7 +80,7 @@ export type CombineProductItem = {
     ]
 }
 
-export type productRequiredListItem = {
+export type ProductRequiredListItem = {
     id: string,
     productId: string,
     materialRequiredList: MaterialInfo[]
@@ -90,7 +90,7 @@ export type CombineProductOrderDetail = {
     id: string,
     materialRequiredList: MaterialInfo[]
     orderList: OrderInfo[]
-    productRequiredList: Array<productRequiredListItem>
+    productRequiredList: Array<ProductRequiredListItem>
 }
 export interface CombineShipOrderDetail extends Omit<CombineProductOrderDetail, 'materialRequiredList'>{}
 

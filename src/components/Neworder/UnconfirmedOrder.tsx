@@ -13,9 +13,10 @@ import {dateConvert, deepEqual} from "@/utilities/usefulTools";
 import {ItemText} from "@/components/Global/ItemText";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
 import {code} from "@antv/g2/lib/geometry/label/layout/worker/hide-overlap";
-import {useAppSelector} from "../../hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks";
 import {selectRole} from "../../features/user/userSlice";
 import { isEqual } from 'lodash';
+import {selectIsUpdate, setUpdate} from "@/features/notification/notificationSlice";
 
 const orderHint: string = 'Unconfirmed Order List:'
 const forecastHint: string = 'Forecast Order List:'
@@ -24,6 +25,8 @@ export const UnconfirmedOrder = ({type}:{type: 'order' | 'forecast'}) => {
     const role = useAppSelector(selectRole)
     const [orderList, setOrderList] = useState<Array<OrderInfo>>([])
     const [loading, setLoading] = useState(false)
+    const isUpdate = useAppSelector(selectIsUpdate)
+    const dispatch = useAppDispatch()
     const newOrderRequest:OrderRequest = {
         customerDept: [],
         expectedTimeBegin: "",
@@ -42,10 +45,19 @@ export const UnconfirmedOrder = ({type}:{type: 'order' | 'forecast'}) => {
         }
     }
     useEffect(() => {
-        getOrdersList()
+        (async function () {
+            await getOrdersList()
+        })()
     }, [])
 
-
+    useEffect(() => {
+        if(isUpdate) {
+            (async function () {
+                await getOrdersList()
+            })()
+        }
+        dispatch(setUpdate(false))
+    }, [isUpdate])
     return (
         <Spin spinning={loading}>
             <div className={styles.unconfirmed_order_container}>
@@ -80,7 +92,7 @@ const UnconfirmedOrderItem = ({orderInfo, confirmedFunction}:{orderInfo: OrderIn
         if(res.code === '200') {
             setOpen(false)
             await confirmedFunction()
-            message.success('Already confirmed')
+            message.success('Confirm success')
         } else {
             message.warning('Something error, please try again')
         }

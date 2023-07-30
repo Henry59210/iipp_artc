@@ -3,7 +3,7 @@ import styles from "@/styles/neworder.module.css";
 import {UnconfirmedOrder} from "@/components/Neworder/UnconfirmedOrder";
 import {Inventory} from "@/components/Neworder/Inventory";
 import {getLayout} from "@/components/Layout";
-import {useAppSelector} from "@/hooks";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {
     selectUnconfirmedOrderCurrent,
     setLastUnconfirmedOrderTab,
@@ -26,7 +26,7 @@ const items: MenuProps['items'] = [
 
 const NewOrder: NextPageWithLayout = () => {
     const currentTab_unconfirmed = useAppSelector(selectUnconfirmedOrderCurrent)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const selectTab: MenuProps['onClick'] = (e) => {
         dispatch(setLastUnconfirmedOrderTab(e.key as unConfirmedOrderTabs))
     };

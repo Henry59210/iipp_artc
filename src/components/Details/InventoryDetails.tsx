@@ -11,7 +11,7 @@ import {selectRole} from "@/features/user/userSlice";
 
 
 const status2color: { [key: string]: string } = {
-    purchase: 'red',
+    purchasing: 'red',
     producing: 'orange',
     shipment: 'green'
 }

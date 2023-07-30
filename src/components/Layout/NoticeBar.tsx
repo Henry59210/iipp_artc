@@ -201,7 +201,9 @@ const MessageBox = forwardRef(({
             case 1:
                 await readMessage([item.id], item.receiverRole)
                 dispatch(removeHandled(item.id))
-                await router.push('/newOrder')
+                if(router.pathname !== '/newOrder') {
+                    await router.push('/newOrder')
+                }
                 break;
             //commercial_production
             case 2:
@@ -220,7 +222,9 @@ const MessageBox = forwardRef(({
                 await readMessage([item.id], item.receiverRole)
                 dispatch(removeHandled(item.id))
                 dispatch(setLastWorkbenchTab('shipment'))
-                await router.push('/workbench')
+                if(router.pathname !== '/workbench/commercial') {
+                    await router.push('/workbench/commercial')
+                }
                 break;
             //shipment_commercial
             case 5:
@@ -241,6 +245,7 @@ const MessageBox = forwardRef(({
     const messageBoxAction = async (e: MouseEvent, buttonText: string) => {
         if (buttonText === 'OK') {
             remove(currentIndex, item.id)
+            dispatch(setUpdate(true))
         } else if (buttonText === 'Handle') {
             await setHandleAction(e)
         }
