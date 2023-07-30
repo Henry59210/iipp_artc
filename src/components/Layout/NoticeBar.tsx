@@ -3,7 +3,7 @@ import styles from "./styles.module.css"
 import {Button, message, Modal, Radio} from "antd";
 import {noticeBarInfo, NotificationType} from "@/apis/socketApis";
 import {useAppDispatch, useAppSelector} from "@/hooks";
-import {removeHandled, selectReadList, setRead} from "@/features/notification/notificationSlice";
+import {removeHandled, selectReadList, setRead, setUpdate} from "@/features/notification/notificationSlice";
 import {selectRole} from "@/features/user/userSlice";
 import {readMessage} from "@/apis/notification";
 import {MouseEvent} from 'react'
@@ -236,6 +236,7 @@ const MessageBox = forwardRef(({
         }
         setModalOpen(false)
         remove(currentIndex, item.id)
+        dispatch(setUpdate(true))
     }
     const messageBoxAction = async (e: MouseEvent, buttonText: string) => {
         if (buttonText === 'OK') {

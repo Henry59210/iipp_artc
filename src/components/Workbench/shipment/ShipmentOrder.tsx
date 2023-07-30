@@ -13,10 +13,13 @@ import {
 } from "@/apis/order";
 import {ShipOrderForm} from "@/components/Order/ShipOrderForm";
 import {UpdateShipInfo} from "@/components/Workbench/shipment/UpdateShipInfo";
+import {selectIsUpdate, setUpdate} from "@/features/notification/notificationSlice";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 
 const reference = {pending: false, fulfilled: true}
 
 export const ShipmentOrder = ({type}: { type: 'pending' | 'fulfilled'}) => {
+    const dispatch = useAppDispatch()
     const timer = useRef<NodeJS.Timeout | null>(null)
     const [loading, setLoading] = useState(false)
     const [combinedData, setCombinedData] = useState<CombineShipItem[]>([])
@@ -24,6 +27,7 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'fulfilled'}) => {
     const [updateOpen, setUpdateOpen] = useState(false);
     const currentId = useRef('')
     const currentProductionOrderLength = useRef(0)
+    const isUpdate = useAppSelector(selectIsUpdate)
     const latestMaterialUsageObj = useRef<{ id: string, materialList: { [key: string]: number } }>({
         id: "",
         materialList: {}
@@ -35,6 +39,15 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'fulfilled'}) => {
             await getCombinedData()
         })()
     }, [])
+
+    useEffect(() => {
+        if(isUpdate) {
+            (async function () {
+                await getCombinedData()
+            })()
+            dispatch(setUpdate(false))
+        }
+    }, [isUpdate])
 
     const getCombinedData = async () => {
         setLoading(true)

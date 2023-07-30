@@ -3,7 +3,7 @@ import {OrderForm} from "@/components/Global/OrderForm";
 import {Button, message, Modal, Spin} from "antd";
 import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
 import React, {useEffect, useRef, useState} from "react";
-import {useAppSelector} from "@/hooks";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {selectRole} from "@/features/user/userSlice";
 import {
     CombineProductItem, finishOrder,
@@ -13,10 +13,14 @@ import {
     rollbackProductionOrder
 } from "@/apis/order";
 import {UpdateMaterial} from "@/components/Workbench/production/UpdateMaterial";
+import {selectIsUpdate, setUpdate} from "@/features/notification/notificationSlice";
+import {dispatch} from "jest-circus/build/state";
+import {useDispatch} from "react-redux";
 
 const reference = {pending: false, fulfilled: true}
 
 export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
+    const dispatch = useAppDispatch()
     const timer = useRef<NodeJS.Timeout | null>(null)
     const [loading, setLoading] = useState(false)
     const [combinedData, setCombinedData] = useState<CombineProductItem[]>([])
@@ -24,6 +28,7 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
     const [updateOpen, setUpdateOpen] = useState(false);
     const currentId = useRef('')
     const currentProductionOrderLength = useRef(0)
+    const isUpdate = useAppSelector(selectIsUpdate)
     const latestMaterialUsageObj = useRef<{ id: string, materialList: { [key: string]: number } }>({
         id: "",
         materialList: {}
@@ -35,6 +40,15 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
             await getCombinedData()
         })()
     }, [])
+
+    useEffect(() => {
+        if(isUpdate) {
+            (async function () {
+                await getCombinedData()
+            })()
+            dispatch(setUpdate(false))
+        }
+    }, [isUpdate])
 
     const getCombinedData = async () => {
         setLoading(true)

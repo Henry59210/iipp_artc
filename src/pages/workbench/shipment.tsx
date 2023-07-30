@@ -1,7 +1,7 @@
 import {NextPageWithLayout} from "@/pages/_app";
 import {getLayout} from "@/components/Layout";
 import {Menu, MenuProps} from "antd";
-import {useAppSelector} from "@/hooks";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {selectWorkbenchCurrent, setLastWorkbenchTab, WorkbenchTabs} from "@/features/pageMemo/pageSlice";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
@@ -25,7 +25,7 @@ const items: MenuProps['items'] = [
 const WorkbenchShipment: NextPageWithLayout = () => {
     const currentTab_workbench = useAppSelector(selectWorkbenchCurrent)
     // 修改数据
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     useEffect(()=>{
         if(currentTab_workbench === '') dispatch(setLastWorkbenchTab('pending'))
     },[])
