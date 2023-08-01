@@ -16,8 +16,8 @@ const items: MenuProps['items'] = [
         key: 'pending',
     },
     {
-        label: 'Fulfilled',
-        key: 'fulfilled',
+        label: 'Arranged',
+        key: 'arranged',
     }
 ];
 
@@ -29,7 +29,7 @@ const WorkbenchShipment: NextPageWithLayout = () => {
     useEffect(()=>{
         if(currentTab_workbench === '') dispatch(setLastWorkbenchTab('pending'))
     },[])
-    const currentComponent = () => currentTab_workbench === 'pending' ? <ShipmentOrder key={1} type={'pending'}/> : <ShipmentOrder key={2} type={'fulfilled'}/>
+    const currentComponent = () => currentTab_workbench === 'pending' ? <ShipmentOrder key={1} type={'pending'}/> : <ShipmentOrder key={2} type={'arranged'}/>
 
     const selectTab: MenuProps['onClick'] = (e) => {
         dispatch(setLastWorkbenchTab(e.key as WorkbenchTabs))

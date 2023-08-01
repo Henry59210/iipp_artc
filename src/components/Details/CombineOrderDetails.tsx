@@ -49,7 +49,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
             if(type === 'production') {
                 res = await getProductionCombineDetail(id, role)
             } else {
-                res = await getShipCombineOrderDetail(id)
+                res = await getShipCombineOrderDetail(id, role)
             }
             if (res.data !== null) {
                 setCombineDetailData(res.data)
@@ -79,20 +79,18 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
     const generateSummaryItems = () => {
         if (current === 'product') {
             return combineDetailData.productRequiredList.map(item => {
-                if (!item.materialRequiredList) return <div>empty</div>
-
                 return (<div key={item.productId} style={{display: 'flex'}}>
                     <ItemText
                               title={item.productName}
                               value={item.quantity}/>
-                    <div style={{marginBottom: 15, marginLeft: 15}}>
+                    {item.materialRequiredList ? <div style={{marginBottom: 15, marginLeft: 15}}>
                         <Popover content={generateMaterialHint(item)} title="Estimated materials consumption">
                             <InfoCircleOutlined style={{color: 'gray', cursor: 'pointer'}}/>
                         </Popover>
-                    </div>
+                    </div> : null}
                 </div>)
             })
-        } else if(current === 'material') {
+        } else if(current === 'material' && (combineDetailData as CombineProductOrderDetail).materialRequiredList) {
                 return (combineDetailData as CombineProductOrderDetail).materialRequiredList.map(item => <ItemText key={item.materialId}
                                                                                    title={item.materialName}
                                                                                    value={item.weight}

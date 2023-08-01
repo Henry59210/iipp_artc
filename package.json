@@ -21,7 +21,8 @@
     "react": "^18.1.0",
     "react-countup": "^6.4.2",
     "react-dom": "^18.1.0",
-    "react-redux": "^7.2.0"
+    "react-redux": "^7.2.0",
+    "sg-carplate": "^0.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.0.0",

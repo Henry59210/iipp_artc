@@ -2,3 +2,24 @@
     width: 100%;
     height: 100%;
 }
+.update_modal_container {
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info_container {
+    width: 80%;
+}
+
+.info_input {
+    width: 100%;
+}
+.info_date {
+    width: 100%;
+}
+
+.date_item {
+    margin-top: 50px;
+}

@@ -16,8 +16,9 @@ import {
 import {ItemText} from "@/components/Global/ItemText";
 import {ShipOrderForm} from "@/components/Order/ShipOrderForm";
 import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
-import {useAppSelector} from "@/hooks";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {selectRole} from "@/features/user/userSlice";
+import {selectIsUpdate, setUpdate} from "@/features/notification/notificationSlice";
 
 
 const preData = {
@@ -27,7 +28,7 @@ const preData = {
     expectedTimeEnd: '',
     orderDateBegin: '',
     orderDateEnd: '',
-    status: ['Production Confirmed']
+    status: ['Pending Notify Shipment']
 }
 //获取合并后的订单
 
@@ -42,6 +43,8 @@ export const ShipmentArea = () => {
     const [selectedItems, setSelectedItems] = useState<OrderInfo[]>([]);
     const currentId = useRef('');
     const selectedOrders = useRef<OrderInfo[]>([]);
+    const dispatch = useAppDispatch()
+    const isUpdate = useAppSelector(selectIsUpdate)
     const hintText_left = 'Pending shipment'
     const hintText_right = 'Pending shipment confirm'
 
@@ -51,6 +54,16 @@ export const ShipmentArea = () => {
             await getCombinedData()
         })()
     }, [])
+
+    useEffect(() => {
+        if(isUpdate) {
+            (async function () {
+                await getCombinedData()
+            })()
+        }
+        dispatch(setUpdate(false))
+    }, [isUpdate])
+
     //左边普通订单的方法
     const getFilterData = async (filterData: OrderRequest) => {
         setLoading(true)
@@ -166,7 +179,7 @@ export const ShipmentArea = () => {
                 </div>
                 <div className={styles.combo_container_form}>
                     <Spin spinning={loading}>
-                        <ShipOrderForm data={combinedData} action={prodOrderOption}/>
+                        <ShipOrderForm data={combinedData} action={prodOrderOption} node={['Detail']} checkbox={false} />
                     </Spin>
                 </div>
                 <Modal
@@ -174,9 +187,7 @@ export const ShipmentArea = () => {
                     centered
                     destroyOnClose={true}
                     open={shipOpen}
-                    okText={'Next'}
-                    cancelText={'Later'}
-                    onOk={() => setShipOpen(false)}
+                    footer={null}
                     onCancel={() => setShipOpen(false)}
                     width={1000}
                 >

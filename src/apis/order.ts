@@ -135,6 +135,15 @@ export type CombineOrderResponse<T> = {
     total: 0
 }
 
+export type shipInfo ={
+    carPlate: string,
+    id: string,
+    leavingTime: string,
+    orderId?: string,
+    startLocation?: string
+}
+
+
 export function getDepartment() {
     return request<string[]>({
         url: '/basic/info/get-dept-list',
@@ -203,9 +212,9 @@ export function getShipCombineOrder(param: { limit?: number, offset?: number }) 
     })
 }
 
-export function getShipCombineOrderDetail(combineId: string) {
+export function getShipCombineOrderDetail(combineId: string, role: string) {
     return request<CombineShipOrderDetail>({
-        url: '/commercial/ship/' + combineId,
+        url: `/${role}/ship/` + combineId,
         method: 'GET',
     })
 }
@@ -241,7 +250,7 @@ export function getExpectedOrderData(param: string) {
         method: 'GET',
     })
 }
-export function modifyMaterialInventory(data:Array<{materialId: string, productionId:string, weight: number}>) {
+export function modifyMaterialInventory(data:Array<{materialId: string, productionId:string, weight: number, expectedWeight:number}>) {
     return request<string>({
         url: '/production/inventory/material',
         method: 'PUT',
@@ -258,7 +267,7 @@ export function finishOrder(data:Array<string>) {
 }
 //For Shipment
 //已经确认的订单
-export function getShipmentOrder( data: { isShipped: boolean }, param: { limit?: number, offset?: number }) {
+export function getShipmentOrder( data: { isShipped: boolean, isArranged: boolean }, param: { limit?: number, offset?: number }) {
     return request<CombineOrderResponse<CombineShipItem>>({
         url: '/shipment/ship/page',
         method: 'POST',
@@ -271,6 +280,22 @@ export function confirmShipmentOrder(data:string[]) {
     return request<string>({
         url: '/shipment/ship/confirm',
         method: 'PUT',
+        data,
+    })
+}
+
+export function submitShipInfo(data:shipInfo) {
+    return request<string>({
+        url: '/shipment/ship',
+        method: 'POST',
+        data,
+    })
+}
+
+export function setOrderShipped(data:string[]) {
+    return request<string>({
+        url: '/shipment/ship/ship',
+        method: 'POST',
         data,
     })
 }

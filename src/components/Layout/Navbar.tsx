@@ -22,11 +22,19 @@ import {reset} from "@/features/pageMemo/pageSlice";
 import {noticeBarInfo, NotificationType} from "@/apis/socketApis";
 import {getToken} from "@/network/auth";
 import {dispatch} from "jest-circus/build/state";
+import {selectIsUpdate, setUpdate} from "@/features/notification/notificationSlice";
 
+const updateReference: {[key:string] : boolean} = {
+    'Production confirmed': true,
+    'Shipment Confirmed': true,
+    'New order':true
+}
 
 const NavBar = () => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
+    const dispatch = useAppDispatch()
+    const isUpdate = useAppSelector(selectIsUpdate)
     const [current, setCurrent] = useState('dashboard')
     const urlForm = useAppSelector(selectUrlForm)
     const [notificationArr, setNotificationArr] = useState<Array<NotificationType>>([])
@@ -34,19 +42,25 @@ const NavBar = () => {
     const userId = useAppSelector(selectUserId)
     const token = getToken()
 
-    const closeCallBack = (data:any) => {
+    const closeCallBack = (data: Array<NotificationType>) => {
         setNotificationArr(data)
+        for (let i in data) {
+            if (updateReference[data[i].content]) {
+                dispatch(setUpdate(true))
+                return
+            }
+        }
     }
-    useEffect(()=>{
+    useEffect(() => {
         setCurrent(Object.entries(urlForm).find(([key, value]) => value === router.asPath)?.[0] !)
     }, [urlForm])
 
-    useEffect(()=>{
-        if(role !== '' && userId !== '' &&  token!== '') {
+    useEffect(() => {
+        if (role !== '' && userId !== '' && token !== '') {
             const noticeBarSocket = noticeBarInfo(role, token, userId)
             noticeBarSocket.initWebSocket(closeCallBack)
         }
-    },[role, userId, token])
+    }, [role, userId, token])
 
     const items: MenuProps['items'] = []
 
@@ -89,8 +103,8 @@ const NavBar = () => {
                     destroyOnClose={true}
                     headerStyle={{'background': 'var(--back-color_navbar)', 'color': 'white'}}
                     bodyStyle={{'padding': '0'}} placement="right" onClose={onClose} open={open}
-                    onClick={(e)=>{
-                        if((e.target as HTMLElement).innerHTML === 'Handle') {
+                    onClick={(e) => {
+                        if ((e.target as HTMLElement).innerHTML === 'Handle') {
                             setOpen(false)
                         }
                     }}>
@@ -103,7 +117,7 @@ const NavBar = () => {
 
 export default NavBar;
 
-const UserBar = (props: {showNoticeBar: any, count: number}) => {
+const UserBar = (props: { showNoticeBar: any, count: number }) => {
     const role = useAppSelector(selectRole)
     const userName = useAppSelector(selectUsername)
     const dispatch = useAppDispatch()

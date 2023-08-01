@@ -38,7 +38,6 @@ export const OrderFilter = (props: { type: 'employee' | 'customer', getFilterDat
         }
     }
     const onFinish = (values?: Filter) => {
-        console.log(values)
         const initialObj: OrderRequest = {
             orderId: '',
             customerDept: [],

@@ -13,8 +13,9 @@ import {
 } from "@/apis/order";
 import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
 import {ItemText} from "@/components/Global/ItemText";
-import {useAppSelector} from "@/hooks";
+import {useAppDispatch, useAppSelector} from "@/hooks";
 import {selectRole} from "@/features/user/userSlice";
+import {selectIsUpdate, setUpdate} from "@/features/notification/notificationSlice";
 
 const preData = {
     orderId: '',
@@ -39,6 +40,8 @@ export const ProductionArea = () => {
     const [toProdOrder, setToProdOrder] = useState(false)
     const hintText_left = 'Pending production'
     const hintText_right = 'Pending production confirm'
+    const dispatch = useAppDispatch()
+    const isUpdate = useAppSelector(selectIsUpdate)
 
     useEffect(() => {
         (async function () {
@@ -46,6 +49,19 @@ export const ProductionArea = () => {
             await getCombinedData()
         })()
     }, [])
+
+    useEffect(()=>{
+        setToProdOrder(false)
+    },[combinedData.length])
+
+    useEffect(() => {
+        if(isUpdate) {
+            (async function () {
+                await getCombinedData()
+            })()
+        }
+        dispatch(setUpdate(false))
+    }, [isUpdate])
 
     const getFilterData = async (filterData: OrderRequest) => {
         setLoading(true)
@@ -95,6 +111,7 @@ export const ProductionArea = () => {
         if (res.code === '200') {
             await getFilterData(preData)
             await getCombinedData()
+            selectedOrders.current = []
         }
     }
 

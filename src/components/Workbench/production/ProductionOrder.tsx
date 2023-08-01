@@ -29,20 +29,19 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
     const currentId = useRef('')
     const currentProductionOrderLength = useRef(0)
     const isUpdate = useAppSelector(selectIsUpdate)
-    const latestMaterialUsageObj = useRef<{ id: string, materialList: { [key: string]: number } }>({
+    const latestMaterialUsageObj = useRef<{ id: string, materialList: { [key: string]: { expected: number, actual: number } } }>({
         id: "",
         materialList: {}
     })
-    const latestMaterialUsage = useRef<Array<{ materialId: string, productionId: string, weight: number }>>([])
+    const latestMaterialUsage = useRef<Array<{ materialId: string, productionId: string, weight: number, expectedWeight: number }>>([])
 
     useEffect(() => {
         (async function () {
             await getCombinedData()
         })()
     }, [])
-
     useEffect(() => {
-        if(isUpdate) {
+        if (isUpdate) {
             (async function () {
                 await getCombinedData()
             })()
@@ -70,11 +69,16 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
     const getLength = (length: number) => {
         currentProductionOrderLength.current = length
     }
-    const getLatestArray = async (weight: string, productionId: string, materialId: string, length: number) => {
+    const getLatestArray = async (weight: string,  expectedWeight: string, productionId: string, materialId: string, length: number) => {
         currentProductionOrderLength.current = length
         latestMaterialUsageObj.current.id = productionId
         if (weight !== '') {
-            latestMaterialUsageObj.current.materialList[materialId] = Number(weight)
+            latestMaterialUsageObj.current.materialList[materialId] = {
+                expected: 0,
+                actual: 0
+            }
+            latestMaterialUsageObj.current.materialList[materialId].expected = Number(expectedWeight)
+            latestMaterialUsageObj.current.materialList[materialId].actual = Number(weight)
         } else {
             delete latestMaterialUsageObj.current.materialList[materialId]
         }
@@ -93,19 +97,28 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
             Object.keys(latestMaterialUsageObj.current.materialList).forEach(item => {
                 latestMaterialUsage.current.push({
                     materialId: item,
-                    weight: Number(latestMaterialUsageObj.current.materialList[item]) * (-1),
+                    weight: Number(latestMaterialUsageObj.current.materialList[item].actual),
+                    expectedWeight: Number(latestMaterialUsageObj.current.materialList[item].expected),
                     productionId: latestMaterialUsageObj.current.id
                 })
             })
             await modifyMaterialInventory(latestMaterialUsage.current)
+            //改产品
             await finishOrder([latestMaterialUsageObj.current.id])
-            setUpdateOpen(false)
-            latestMaterialUsage.current = []
+            cancelMaterialUsage()
             await getCombinedData()
         }
     }
+    const cancelMaterialUsage = () => {
+        setUpdateOpen(false)
+        latestMaterialUsage.current = []
+        latestMaterialUsageObj.current = {
+            id: "",
+            materialList: {}
+        }
+    }
     return (
-        <Spin spinning={loading} >
+        <Spin spinning={loading}>
             <div className={styles.pending_container}>
                 <OrderForm data={combinedData} checkbox={false} combine={true}
                            node={type === 'pending' ? ['Detail', 'Update'] : ['Detail']}
@@ -129,7 +142,7 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
                 open={updateOpen}
                 okText={'confirm'}
                 onOk={updateMaterialUsage}
-                onCancel={() => setUpdateOpen(false)}
+                onCancel={cancelMaterialUsage}
                 width={1000}
             >
                 <UpdateMaterial id={currentId.current} getLatestArray={getLatestArray} getLength={getLength}/>

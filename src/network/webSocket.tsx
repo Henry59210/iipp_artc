@@ -23,7 +23,8 @@ export function websocketAPI(websocketUrl: string, token?: string):WebSocketAPIM
         timeout: 30 * 1000, //每段时间发送一次心跳包 这里设置为60s
         heartbeat: null, //延时发送消息对象（启动心跳新建这个对象，收到消息后重置对象）
         start: function () {
-            this.heartbeat = setInterval(() => {
+            this.heartbeat = setInterval(() =>
+            {
                 if (isConnect) {
                     webSocketSend(this.heartbeatData);
                 } else {
@@ -99,7 +100,9 @@ export function websocketAPI(websocketUrl: string, token?: string):WebSocketAPIM
     function webSocketOnMessage(e: any) {
         console.log("websocket信息:");
         const data = JSON.parse(e.data);//根据自己的需要对接收到的数据进行格式化
-        globalCallback(data);//将data传给在外定义的接收数据的函数，至关重要。
+        if(data !== 'pong'){
+            globalCallback(data);//将data传给在外定义的接收数据的函数，至关重要。
+        }
     }
 
 //socket关闭时触发
@@ -113,7 +116,7 @@ export function websocketAPI(websocketUrl: string, token?: string):WebSocketAPIM
                 initWebSocket(currentCb);
                 ++reConnectNum;
             } else {
-                message.warning('websocket连接不上，请刷新页面或联系开发人员!\'')
+                message.warning('Websocket connect failed，Please call developer!\'')
             }
         }
     }

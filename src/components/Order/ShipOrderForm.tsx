@@ -5,6 +5,7 @@ import styles from "@/components/Global/styles.module.css";
 import {CombineProductItem, CombineShipItem, CombineShipItemOrders, OrderInfo} from "@/apis/order";
 import {dateConvert} from "@/utilities/usefulTools";
 
+
 const reference: { [key: string]: ColumnType<CombineShipItem> } = {
     carPlate: {
         title: 'Car Plate',
@@ -25,10 +26,13 @@ const reference: { [key: string]: ColumnType<CombineShipItem> } = {
             )
     }
 }
-export const ShipOrderForm = ({data, action, expectColumn}: {
+export const ShipOrderForm = ({data, action, checkbox, expectColumn, node, selectedAction}: {
     data: CombineShipItem[],
     action: Function // open modal
     expectColumn?: Array<'carPlate' | 'leavingTime'>,
+    node: string[],
+    selectedAction?: Function
+    checkbox: boolean
 }) => {
     let expectArr: ColumnsType<CombineShipItem> = []
 
@@ -81,16 +85,22 @@ export const ShipOrderForm = ({data, action, expectColumn}: {
                 alignItems: 'center',
                 color: '#409EFF'
             }}>
-                <a onClick={() => {
-                    action(record)
-                }}>Details</a>
+                {
+                    node.map((item, index) => <a key={index} onClick={() => action(record, item)}>{item}</a>)
+                }
             </div>,
         },
     ]
 
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: CombineShipItem[]) => {
+            selectedAction!(selectedRows as CombineShipItem[])
+        },
+    };
 
     return <Table
         rowKey={(record) => record.id}
+        rowSelection={checkbox ? rowSelection : undefined}
         columns={columns}
         pagination={false}
         sticky={true}

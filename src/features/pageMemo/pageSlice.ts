@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import store, {AppState} from "@/store";
 import {selectRole} from "@/features/user/userSlice";
 
-export type WorkbenchTabs = '' | 'purchase' | 'production' | 'shipment' | 'pending' | 'fulfilled'
+export type WorkbenchTabs = '' | 'purchase' | 'production' | 'shipment' | 'pending' | 'fulfilled' | 'arranged'
 export type unConfirmedOrderTabs = 'order' | 'forecast'
 
 export interface PageState {

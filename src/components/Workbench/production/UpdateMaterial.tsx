@@ -38,7 +38,7 @@ export const UpdateMaterial = ({id, getLatestArray, getLength}: { id: string, ge
                 </div>
                 <div className={styles.items_container}>
                     {expectData.materialRequiredList.map(item => <MaterialItem key={item.materialId} item={item} id={id}
-                                                                               length={expectData.materialRequiredList.length}
+                                                                               expectedMaterialArr={expectData.materialRequiredList}
                                                                                getLatestArray={getLatestArray}/>)}
                 </div>
             </div>
@@ -55,13 +55,13 @@ interface NumericInputProps {
 const MaterialItem = ({
                           item,
                           id,
-                          length,
+                          expectedMaterialArr,
                           getLatestArray
-                      }: { item: MaterialInfo, id: string, length: number, getLatestArray: Function }) => {
+                      }: { item: MaterialInfo, id: string, expectedMaterialArr: MaterialInfo[], getLatestArray: Function }) => {
     const [value, setValue] = useState('');
     const onChangeInput = (value: string, materialId: string) => {
         setValue(value)
-        getLatestArray(value, id, materialId, length)
+        getLatestArray(value, item.weight, id, materialId,  expectedMaterialArr.length)
     }
     return (
         <div className={styles.material_item}>
@@ -81,6 +81,7 @@ const MaterialItem = ({
             </div>
         </div>)
 }
+
 const NumericInput = (props: NumericInputProps) => {
     const {value, onChange} = props;
 

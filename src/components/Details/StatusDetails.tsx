@@ -46,7 +46,7 @@ export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined })
         if (!orderInfo) return null
         return <div style={{width: '70%', paddingTop: 20}}>
             <Row>
-                <Col span={10}>
+                <Col span={12}>
                     <Space direction="vertical" size="middle" style={{fontWeight: 'bolder'}}>
                         <li>Order Id:</li>
                         <li>Country:</li>
@@ -54,7 +54,7 @@ export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined })
                         <li>Order Date:</li>
                     </Space>
                 </Col>
-                <Col span={14}>
+                <Col span={12}>
                     <Space direction="vertical" size="middle">
                         <li>{orderInfo.id}</li>
                         <li>{orderInfo.customerDept}</li>

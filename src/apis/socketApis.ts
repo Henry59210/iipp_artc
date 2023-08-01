@@ -27,6 +27,7 @@ export type NotificationType = {
     createTime: string
     createUser: string
     id: string
+    orderDesc: string
     orderId: string
     readFlag: boolean
     receiverRole:string

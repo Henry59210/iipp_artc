@@ -145,7 +145,7 @@ const MessageBox = forwardRef(({
     const [isHandleButton, setIsHandleButton] = useState(true)
     const [orderType, setOrderType] = useState('')
     const [modalOpen, setModalOpen] = useState(false)
-    const [modalContent, setModalContent] = useState<'production' | 'shipment'>('production')
+    const modalContent = useRef<'production' | 'shipment'>('production')
 
     useEffect(() => {
         setButton()
@@ -156,7 +156,8 @@ const MessageBox = forwardRef(({
         'commercial_production': 2,
         'commercial_shipment': 3,
         'production_commercial': 4,
-        'shipment_commercial': 5
+        'shipment_commercial': 5,
+        'shipment_customer': 6
     }
 
 
@@ -182,12 +183,19 @@ const MessageBox = forwardRef(({
                 break;
             //production_commercial
             case 4:
+                if(item.content === 'Production confirmed') {
+                    setIsHandleButton(false)
+                }
                 setIsOkButton(true)
-                setIsHandleButton(true)
-                setOrderType('Produce Finished')
+                setOrderType(item.content)
                 break;
             //shipment_commercial
             case 5:
+                setIsOkButton(true)
+                setIsHandleButton(false)
+                setOrderType('Order Shipped')
+                break;
+            case 6:
                 setIsOkButton(true)
                 setIsHandleButton(false)
                 setOrderType('Order Shipped')
@@ -208,13 +216,13 @@ const MessageBox = forwardRef(({
             //commercial_production
             case 2:
                 e.stopPropagation()
-                setModalContent('production')
+                modalContent.current = 'production'
                 setModalOpen(true)
                 break;
             //commercial_shipment
             case 3:
                 e.stopPropagation()
-                setModalContent('shipment')
+                modalContent.current = 'shipment'
                 setModalOpen(true)
                 break;
             //production_commercial
@@ -228,12 +236,13 @@ const MessageBox = forwardRef(({
                 break;
             //shipment_commercial
             case 5:
+            case 6:
                 break;
         }
     }
 
     const confirmOrder = async () => {
-        if(modalContent === 'production') {
+        if(modalContent.current === 'production') {
             await confirmProductionOrder([item.orderId])
         } else {
             await confirmShipmentOrder([item.orderId])
@@ -245,7 +254,6 @@ const MessageBox = forwardRef(({
     const messageBoxAction = async (e: MouseEvent, buttonText: string) => {
         if (buttonText === 'OK') {
             remove(currentIndex, item.id)
-            dispatch(setUpdate(true))
         } else if (buttonText === 'Handle') {
             await setHandleAction(e)
         }
@@ -269,7 +277,7 @@ const MessageBox = forwardRef(({
                 onCancel={() => setModalOpen(false)}
                 width={1200}
             >
-                <CombineOrderDetails id={item.orderId} type={modalContent}/>
+                <CombineOrderDetails id={item.orderId} type={modalContent.current}/>
             </Modal>
         </div>
     )
