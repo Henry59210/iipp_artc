@@ -258,6 +258,13 @@ export function modifyMaterialInventory(data:Array<{materialId: string, producti
     })
 }
 
+export function modifyProductInventory(data:Array<{ productId: string, quantity: number }>) {
+    return request<string>({
+        url: '/production/inventory/product',
+        method: 'PUT',
+        data
+    })
+}
 export function finishOrder(data:Array<string>) {
     return request<string>({
         url: '/production/production',

@@ -7,7 +7,7 @@ import React, {useEffect, useState} from "react";
 import {CombineProductOrderDetail, getExpectedOrderData, MaterialInfo} from "@/apis/order";
 import {ItemText} from "@/components/Global/ItemText";
 
-export const UpdateMaterial = ({id, getLatestArray, getLength}: { id: string, getLatestArray: Function, getLength:Function }) => {
+export const UpdateMaterial = ({id, setProductsList, getLatestArray, getLength}: { id: string, setProductsList:Function, getLatestArray: Function, getLength:Function }) => {
     const [expectData, setExpectData] = useState<Omit<CombineProductOrderDetail, 'id' | 'orderList'>>({
         materialRequiredList: [],
         productRequiredList: []
@@ -17,6 +17,7 @@ export const UpdateMaterial = ({id, getLatestArray, getLength}: { id: string, ge
             const res = await getExpectedOrderData(id)
             if (res.data !== null) {
                 setExpectData(res.data)
+                setProductsList(res.data.productRequiredList)
                 getLength(res.data.materialRequiredList.length)
             }
         })()

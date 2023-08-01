@@ -8,8 +8,8 @@ import {selectRole} from "@/features/user/userSlice";
 import {
     CombineProductItem, finishOrder,
     getProductionCombineOrder,
-    getProductionOrder, modifyMaterialInventory,
-    OrderInfo,
+    getProductionOrder, modifyMaterialInventory, modifyProductInventory,
+    OrderInfo, ProductRequiredListItem,
     rollbackProductionOrder
 } from "@/apis/order";
 import {UpdateMaterial} from "@/components/Workbench/production/UpdateMaterial";
@@ -18,6 +18,14 @@ import {dispatch} from "jest-circus/build/state";
 import {useDispatch} from "react-redux";
 
 const reference = {pending: false, fulfilled: true}
+
+type MaterialUsageObjType = {
+    id: string,
+    materialList: { [key: string]: { expected: number, actual: number } },
+    productList: {productId: string, quantity: number}[]
+}
+
+
 
 export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
     const dispatch = useAppDispatch()
@@ -29,9 +37,10 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
     const currentId = useRef('')
     const currentProductionOrderLength = useRef(0)
     const isUpdate = useAppSelector(selectIsUpdate)
-    const latestMaterialUsageObj = useRef<{ id: string, materialList: { [key: string]: { expected: number, actual: number } } }>({
+    const latestMaterialUsageObj = useRef<MaterialUsageObjType>({
         id: "",
-        materialList: {}
+        materialList: {},
+        productList: []
     })
     const latestMaterialUsage = useRef<Array<{ materialId: string, productionId: string, weight: number, expectedWeight: number }>>([])
 
@@ -69,7 +78,7 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
     const getLength = (length: number) => {
         currentProductionOrderLength.current = length
     }
-    const getLatestArray = async (weight: string,  expectedWeight: string, productionId: string, materialId: string, length: number) => {
+    const getLatestArray = async (weight: string, expectedWeight: string, productionId: string, materialId: string, length: number) => {
         currentProductionOrderLength.current = length
         latestMaterialUsageObj.current.id = productionId
         if (weight !== '') {
@@ -83,6 +92,14 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
             delete latestMaterialUsageObj.current.materialList[materialId]
         }
         console.log(latestMaterialUsageObj.current)
+    }
+
+    const getProductList = (productList: ProductRequiredListItem[]) => {
+        const result:{productId: string, quantity: number}[] = []
+        productList.forEach(item => {
+            result.push({productId: item.productId, quantity: item.quantity})
+        })
+        latestMaterialUsageObj.current.productList = result
     }
 
     const updateMaterialUsage = async () => {
@@ -103,7 +120,7 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
                 })
             })
             await modifyMaterialInventory(latestMaterialUsage.current)
-            //改产品
+            await modifyProductInventory(latestMaterialUsageObj.current.productList)
             await finishOrder([latestMaterialUsageObj.current.id])
             cancelMaterialUsage()
             await getCombinedData()
@@ -114,7 +131,8 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
         latestMaterialUsage.current = []
         latestMaterialUsageObj.current = {
             id: "",
-            materialList: {}
+            materialList: {},
+            productList: []
         }
     }
     return (
@@ -145,7 +163,7 @@ export const ProductionOrder = ({type}: { type: 'pending' | 'fulfilled' }) => {
                 onCancel={cancelMaterialUsage}
                 width={1000}
             >
-                <UpdateMaterial id={currentId.current} getLatestArray={getLatestArray} getLength={getLength}/>
+                <UpdateMaterial id={currentId.current} setProductsList={getProductList} getLatestArray={getLatestArray} getLength={getLength}/>
             </Modal>
         </Spin>
     )
