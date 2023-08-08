@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import styles from '../../components/Login/styles.module.css'
 import LoginBox from "../../components/Login/login";
+import Head from "next/head";
 
 const LoginPage: NextPage = () => {
 

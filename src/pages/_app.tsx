@@ -7,6 +7,7 @@ import store from '../store'
 import {NextPage} from "next";
 import React, {ReactElement, ReactNode, useState} from "react";
 import {Permission} from "../authenticate/permission";
+import Head from "next/head";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode
@@ -21,6 +22,10 @@ export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
     return (
         <Provider store={store}>
             {getLayout(<Permission>
+                <Head>
+                    <title>Inventory planning platform</title>
+                    <link rel="icon" href="/favicon.ico"/>
+                </Head>
                 <Component {...pageProps} />
             </Permission>)}
         </Provider>

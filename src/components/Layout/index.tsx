@@ -3,6 +3,7 @@ import {ReactElement, ReactNode} from "react";
 import {NoticeBar} from "@/components/Layout/NoticeBar";
 import styles from "./styles.module.css"
 import {ConfigProvider} from "antd";
+import Head from "next/head";
 
 export const Layout = ({children}: {children: ReactNode}) => {
     return (
