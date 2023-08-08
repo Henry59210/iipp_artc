@@ -24,7 +24,7 @@ export default function MyApp({Component, pageProps}: AppPropsWithLayout) {
             {getLayout(<Permission>
                 <Head>
                     <title>Inventory planning platform</title>
-                    <link rel="icon" href="/favicon.ico"/>
+                    <link rel="icon" href="../../public/favicon.ico"/>
                 </Head>
                 <Component {...pageProps} />
             </Permission>)}
