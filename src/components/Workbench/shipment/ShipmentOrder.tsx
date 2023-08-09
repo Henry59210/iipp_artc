@@ -1,4 +1,4 @@
-import {message, Modal, Spin} from "antd";
+import {Button, message, Modal, Popover, Spin} from "antd";
 import styles from "@/components/Workbench/production/styles.module.css";
 import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
 import React, {useEffect, useRef, useState} from "react";
@@ -16,6 +16,7 @@ const reference = {pending: false, arranged: true}
 export const ShipmentOrder = ({type}: { type: 'pending' | 'arranged' }) => {
     const dispatch = useAppDispatch()
     const timer = useRef<NodeJS.Timeout | null>(null)
+    const [shipped, setShipped] = useState(false)
     const [loading, setLoading] = useState(false)
     const [combinedData, setCombinedData] = useState<CombineShipItem[]>([])
     const [detailOpen, setDetailOpen] = useState(false);
@@ -54,22 +55,32 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'arranged' }) => {
             setUpdateOpen(true)
         }
     }
+    const setShipOrderShipped = async () => {
 
+    }
     const getSelectedOrder = (selectedRows: CombineShipItem[]) => {
-
+        if (selectedRows.length > 0) {
+            setShipped(true)
+        } else setShipped(false)
     }
 
     const cancelShipmentInfo = () => {
         setUpdateOpen(false)
     }
     return (
-        <Spin spinning={loading}>
-            <div className={styles.pending_container}>
-                <ShipOrderForm data={combinedData} action={pendingOrderOption}
-                               checkbox={type === 'arranged'}
-                               selectedAction={getSelectedOrder}
-                               node={type === 'pending' ? ['Detail', 'Update'] : ['Detail']}
-                               expectColumn={reference[type] ? ['carPlate', 'leavingTime'] : []}/>
+        <div className={styles.pending_container} style={{display: "flex", flexDirection: "column"}}>
+            <div style={{paddingBottom: 10, flex: 1, overflow: "auto"}}>
+                <Spin spinning={loading}>
+                    <ShipOrderForm data={combinedData} action={pendingOrderOption}
+                                   checkbox={type === 'arranged'}
+                                   selectedAction={getSelectedOrder}
+                                   node={type === 'pending' ? ['Detail', 'Update'] : ['Detail']}
+                                   expectColumn={reference[type] ? ['carPlate', 'leavingTime'] : []}/>
+                </Spin>
+            </div>
+
+            <div className={`${styles.package_order} ${shipped ? styles.package_order_active : ''}`}>
+                {shipped ? <Button onClick={setShipOrderShipped}>SetShipped</Button> : null}
             </div>
             <Modal
                 title="Shipment Order Details"
@@ -82,8 +93,10 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'arranged' }) => {
             >
                 <CombineOrderDetails id={currentId.current} type={'shipment'}/>
             </Modal>
-
-            <UpdateShipInfo id={currentId.current} open={updateOpen} closeModal={cancelShipmentInfo} updateShipmentList={getCombinedData}/>
-        </Spin>
+            {/*below is modal*/
+            }
+            <UpdateShipInfo id={currentId.current} open={updateOpen} closeModal={cancelShipmentInfo}
+                            updateShipmentList={getCombinedData}/>
+        </div>
     )
 }

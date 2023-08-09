@@ -193,7 +193,6 @@ export const ProductionArea = () => {
                         <OrderForm data={combinedData} checkbox={false} combine={true} node={['Detail', 'Rollback']}
                                    action={prodOrderOption}/>
                     </Spin>
-
                 </div>
                 <Modal
                     title="Production Order Details"
