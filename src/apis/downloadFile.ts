@@ -7,10 +7,10 @@ export async function downLoadProductInventory() {
         method: 'GET',
         headers: {Authorization: getToken()!}
     })
-    const fileName = response.headers.get('content-disposition')!.split('filename=')[1]
+    const fileName = response.headers.get('content-disposition')!.split('filename=')[1].replace(/^"(.*)"$/, '$1')
 
     const res = response.blob().then((blob) => {
-        saveBlobAs(blob, `${fileName}.xls`)
+        saveBlobAs(blob, fileName)
     })
     return res
 }
@@ -20,10 +20,10 @@ export async function downLoadMaterialInventory() {
         method: 'GET',
         headers: {Authorization: getToken()!}
     })
-    const fileName = response.headers.get('content-disposition')!.split('filename=')[1]
+    const fileName = response.headers.get('content-disposition')!.split('filename=')[1].replace(/^"(.*)"$/, '$1')
 
     const res = response.blob().then((blob) => {
-        saveBlobAs(blob, `${fileName}.xls`)
+        saveBlobAs(blob, fileName)
     })
     return res
 }
