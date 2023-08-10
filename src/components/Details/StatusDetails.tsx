@@ -13,6 +13,7 @@ const {Title} = Typography;
 
 export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined }) => {
     const [isConfirmed, setIsConfirmed] = useState(false)
+    console.log(orderInfo)
     const generateTimeline = () => {
         const timeline: TimelineItemProps[] | undefined = []
         if (orderInfo === undefined) {
@@ -49,17 +50,21 @@ export const StatusDetails = ({orderInfo}: { orderInfo: OrderInfo | undefined })
                 <Col span={12}>
                     <Space direction="vertical" size="middle" style={{fontWeight: 'bolder'}}>
                         <li>Order Id:</li>
+                        <li>Tracking Id:</li>
                         <li>Country:</li>
-                        <li>Expected Time:</li>
+                        <li>Expected Date:</li>
                         <li>Order Date:</li>
+                        <li>Car Plate:</li>
                     </Space>
                 </Col>
                 <Col span={12}>
                     <Space direction="vertical" size="middle">
                         <li>{orderInfo.id}</li>
+                        <li>{orderInfo.trackingId ? orderInfo.trackingId : ' - '}</li>
                         <li>{orderInfo.customerDept}</li>
                         <li>{dateConvert(orderInfo.expectedTime,['YYYY','-','MM','-','DD'])}</li>
                         <li>{dateConvert(orderInfo.orderDate,['YYYY','-','MM','-','DD'])}</li>
+                        <li>{orderInfo.carPlate ? orderInfo.carPlate : ' - '}</li>
                     </Space>
                 </Col>
             </Row>

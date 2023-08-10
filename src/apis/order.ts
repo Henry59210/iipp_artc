@@ -30,7 +30,9 @@ export type OrderInfo = {
     orderDate: string
     productList: Array<ProductInfo>
     status: string,
-    orderStatusHistoryList: OrderStatus[]
+    orderStatusHistoryList: OrderStatus[],
+    trackingId?: string,
+    carPlate?: string,
 }
 
 export type ProductInfo = {
@@ -136,6 +138,7 @@ export type CombineOrderResponse<T> = {
 }
 
 export type shipInfo ={
+    trackingId: string,
     carPlate: string,
     id: string,
     leavingTime: string,
@@ -143,7 +146,7 @@ export type shipInfo ={
     startLocation?: string
 }
 
-
+//For commercial
 export function getDepartment() {
     return request<string[]>({
         url: '/basic/info/get-dept-list',
@@ -174,6 +177,15 @@ export function confirmOrder(data: OrderDetail) {
         data
     })
 }
+
+export function changeFromPurchasing(data: string) {
+    return request({
+        url: '/commercial/order/procurement',
+        method: 'POST',
+        data
+    })
+}
+
 export function packageProductionOrder(data: string[]) {
     return request({
         url: '/commercial/order',
@@ -306,3 +318,5 @@ export function setOrderShipped(data:string[]) {
         data,
     })
 }
+
+

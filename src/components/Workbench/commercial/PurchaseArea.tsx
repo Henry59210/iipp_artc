@@ -3,10 +3,20 @@ import {OrderFilter} from "@/components/Order/OrderFilter";
 import React, {useEffect, useRef, useState} from "react";
 import {OrderForm} from "@/components/Global/OrderForm";
 import {InventoryDetails} from "@/components/Details/InventoryDetails";
-import {Modal, Spin} from "antd";
-import {getOrdersForCommercial, OrderInfo, OrderRequest} from "@/apis/order";
+import {Button, message, Modal, Spin} from "antd";
+import {changeFromPurchasing, getOrdersForCommercial, OrderInfo, OrderRequest} from "@/apis/order";
 import {useAppSelector} from "@/hooks";
 import {selectRole} from "@/features/user/userSlice";
+
+const preData = {
+    orderId: '',
+    customerDept: [],
+    expectedTimeBegin: '',
+    expectedTimeEnd: '',
+    orderDateBegin: '',
+    orderDateEnd: '',
+    status: ['Pending RM Purchase']
+}
 
 export const PurchaseArea = () => {
     const role = useAppSelector(selectRole)
@@ -14,6 +24,7 @@ export const PurchaseArea = () => {
     const [data, setData] = useState<OrderInfo[]>([])
     const [open, setOpen] = useState(false);
     const [currentId, setCurrentId] = useState('');
+    const [executableState, setExecutableState] = useState<string>('');
 
     const getFilterData = async (filterData: OrderRequest) => {
         setLoading(true)
@@ -27,11 +38,25 @@ export const PurchaseArea = () => {
         setOpen(true)
         setCurrentId(id)
     }
+
+    const getExecutableState = (state: string) => {
+        setExecutableState(state)
+    }
+
+    const setPurchasingChange = async () => {
+        const res = await changeFromPurchasing(currentId)
+        if (res.msg === 'Material Inventory is not enough！') {
+            message.warning("Update wrong, please try again")
+        }
+        setOpen(false)
+        await getFilterData(preData)
+    }
     return (
         <Spin spinning={loading}>
             <div className={styles.purchase_container}>
                 <div className={styles.purchase_container_filter}>
-                    <OrderFilter type={'employee'} getFilterData={getFilterData} status={'Pending RM Purchase'} combine={false}/>
+                    <OrderFilter type={'employee'} getFilterData={getFilterData} status={'Pending RM Purchase'}
+                                 combine={false}/>
                 </div>
                 <div className={styles.purchase_container_form}>
                     <OrderForm data={data} checkbox={false} node={['handle']} action={openModal} combine={false}/>
@@ -40,13 +65,13 @@ export const PurchaseArea = () => {
                     title="Inventory Details"
                     centered
                     open={open}
-                    okText={'Next'}
-                    cancelText={'Later'}
-                    onOk={() => setOpen(false)}
                     onCancel={() => setOpen(false)}
+                    footer={executableState === 'Deliverable' ? null : [
+                        <Button key="back" onClick={() => setOpen(false)}>Later</Button>,
+                        <Button key="submit" type="primary" loading={loading} onClick={setPurchasingChange}>Next</Button>]}
                     width={1000}
                 >
-                    <InventoryDetails id={currentId}/>
+                    <InventoryDetails id={currentId} getStatus={getExecutableState}/>
                 </Modal>
             </div>
         </Spin>

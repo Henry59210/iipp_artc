@@ -13,7 +13,7 @@ import { resetToken } from '@/features/user/userSlice';
  * }
  * @param myOptions
  */
-const basicInfo = {
+export const basicInfo = {
     baseURL: '/api/v1',
     timeout: 5000
 }

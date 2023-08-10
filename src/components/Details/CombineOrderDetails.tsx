@@ -123,7 +123,7 @@ export const CombineOrderDetails = ({id, type}: { id: string, type: 'production'
                     footer={null}
                     onOk={() => setDetailOpen(false)}
                     onCancel={() => setDetailOpen(false)}
-                    width={800}
+                    width={1000}
                 >
                     {type === 'production' ? <InventoryDetails id={currentOrderId.current}/>
                         : <StatusDetails orderInfo={

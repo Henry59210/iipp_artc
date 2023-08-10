@@ -104,6 +104,7 @@ export const ShipmentArea = () => {
         if (res.code === '200') {
             await getFilterData(preData)
             await getCombinedData()
+            setShipOpen(false)
         }
     }
     const generateSelectedDetail = () => {

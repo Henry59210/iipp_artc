@@ -33,8 +33,9 @@ export const UpdateShipInfo = ({
         }
     }
 
-    const onFinish = async ({carPlate, leavingTime}: { carPlate: string, leavingTime: Dayjs }) => {
+    const onFinish = async ({trackingId, carPlate, leavingTime}: { trackingId: string, carPlate: string, leavingTime: Dayjs }) => {
         const obj: shipInfo = {
+            trackingId,
             carPlate,
             leavingTime: leavingTime.format('YYYY-MM-DDT00:00:00'),
             id: id
@@ -67,7 +68,12 @@ export const UpdateShipInfo = ({
                   onFinish={onFinish}
             >
                 <div className={styles.info_container}>
+                    <Form.Item name="trackingId"
+                               label={<span  style={{ fontSize: 18 }}>Tracking Id</span>} rules={[{required: true}]}>
+                        <Input className={styles.info_input}/>
+                    </Form.Item>
                     <Form.Item name="carPlate" label={<span  style={{ fontSize: 18 }}>Car Plate ( SKD4533B )</span>}
+                               className={styles.date_item}
                                hasFeedback={true}
                                validateTrigger="onBlur" // 输入完成, 失去焦点后开始校验
                                validateStatus={validateStatus}

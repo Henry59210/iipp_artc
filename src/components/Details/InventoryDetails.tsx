@@ -16,7 +16,7 @@ const status2color: { [key: string]: string } = {
     shipment: 'green'
 }
 
-export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, id?: string }) => {
+export const InventoryDetails = ({orderDetail, id, getStatus}: { orderDetail?: OrderDetail, id?: string, getStatus?: (status: string)=>void }) => {
     const role = useAppSelector(selectRole)
     const [unconfirmedOrderStatus, setUnconfirmedOrderStatus] = useState<'purchasing' | 'producing' | 'shipment'>('purchasing')
     const [_orderDetail, setOrderDetail] = useState<OrderDetail>({
@@ -37,6 +37,8 @@ export const InventoryDetails = ({orderDetail,id}: { orderDetail?: OrderDetail, 
                 const res = await getOrderInventoryDetail(id, role)
                 if(res.data !== null) {
                     setOrderDetail(res.data)
+                    if (getStatus !== undefined)
+                        getStatus(res.data.executableState)
                     setUnconfirmedOrderStatus(generateStatus(res.data))
                 }
             })()
