@@ -4,7 +4,7 @@ import {CombineOrderDetails} from "@/components/Details/CombineOrderDetails";
 import React, {useEffect, useRef, useState} from "react";
 import {
     CombineShipItem,
-    getShipmentOrder,
+    getShipmentOrder, setOrderShipped,
 } from "@/apis/order";
 import {ShipOrderForm} from "@/components/Order/ShipOrderForm";
 import {UpdateShipInfo} from "@/components/Workbench/shipment/UpdateShipInfo";
@@ -22,6 +22,7 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'arranged' }) => {
     const [detailOpen, setDetailOpen] = useState(false);
     const [updateOpen, setUpdateOpen] = useState(false);
     const currentId = useRef('')
+    const selectedShipOrders = useRef<string[]>([])
     const isUpdate = useAppSelector(selectIsUpdate)
 
     useEffect(() => {
@@ -56,12 +57,19 @@ export const ShipmentOrder = ({type}: { type: 'pending' | 'arranged' }) => {
         }
     }
     const setShipOrderShipped = async () => {
-
+        await setOrderShipped(selectedShipOrders.current)
+        await getCombinedData()
+        setShipped(false)
+        selectedShipOrders.current = []
     }
     const getSelectedOrder = (selectedRows: CombineShipItem[]) => {
+        selectedShipOrders.current = []
         if (selectedRows.length > 0) {
             setShipped(true)
-        } else setShipped(false)
+            selectedShipOrders.current = selectedRows.map(item=>item.id)
+        } else {
+            setShipped(false)
+        }
     }
 
     const cancelShipmentInfo = () => {
