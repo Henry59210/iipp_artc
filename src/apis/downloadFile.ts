@@ -7,22 +7,27 @@ export async function downLoadProductInventory() {
         method: 'GET',
         headers: {Authorization: getToken()!}
     })
+    const fileName = response.headers.get('content-disposition')!.split('filename=')[1]
+
     const res = response.blob().then((blob) => {
-        saveBlobAs(blob, 'product_Inventory.xls')
+        saveBlobAs(blob, `${fileName}.xls`)
     })
     return res
 }
 
 export async function downLoadMaterialInventory() {
-    const res = await fetch(basicInfo.baseURL + '/commercial/file/material/download-inventory', {
+    const response = await fetch(basicInfo.baseURL + '/commercial/file/material/download-inventory', {
         method: 'GET',
         headers: {Authorization: getToken()!}
     })
-    const res1 = res.blob().then((blob) => {
-        saveBlobAs(blob, 'material_Inventory.xls')
+    const fileName = response.headers.get('content-disposition')!.split('filename=')[1]
+
+    const res = response.blob().then((blob) => {
+        saveBlobAs(blob, `${fileName}.xls`)
     })
-    return res1
+    return res
 }
+
 function saveBlobAs(blob: any, filename: any) {
     if ((window.navigator as any).msSaveOrOpenBlob) {
         (navigator as any).msSaveBlob(blob, filename)
